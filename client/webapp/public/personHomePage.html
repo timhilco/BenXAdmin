@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>BenX - Person Home Page</title>
+  </head>
+
+  <body>
+    <h1>Person Home Page</h1>
+    <h2> {{.FirstName}} {{.LastName}}</h2>
+    <p>Internal Id:   {{.InternalId}}</p>
+    <p>Person ID (External):  {{.ExternalId}}</p>
+    <p>First Name: {{.FirstName}}</p>
+    <p>Last Name: {{.LastName}}</p>
+    <p>Birth Date: {{.BirthDate}}</p>
+    <h2>Person Roles</h2>
+    <h3>Employment Roles</h3>
+    <ul>
+    {{ range .Workers}}
+    <li>{{.Employer}}</li>
+    {{end }}
+    </ul>
+    <h3>Benefit Profile</h3>
+    <ul>
+    {{ range .Participants}}
+    <li><a href="localhost:8080/api/participants/{{.InternalId}}/benefits/{{.BenefitId}}">{{.BenefitId}}- {{.BenefitPlanId}}</a></li>
+    {{end }}
+    </ul>
+    <h2>Person Business Processes</h2>
+    <ul>
+    {{ range .BusinessProcesses}}
+    <li>{{.ReferenceNumber}}</li>
+    {{end }}
+    </ul>
+  </body>
+  </html>

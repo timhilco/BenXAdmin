@@ -1,0 +1,22 @@
+graph ER {
+	fontname="Helvetica,Arial,sans-serif"
+	node [fontname="Helvetica,Arial,sans-serif"]
+	edge [fontname="Helvetica,Arial,sans-serif"]
+	layout="neato"
+	node [shape=ellipse]; 
+    // Fundamental
+		Person; 
+		Benefit; 
+    //Dependent
+	node [shape=invtrapezium]; 
+	    Address; 
+    //Associations     
+	node [shape=box,style=filled,color=lightgrey]; 
+	    PersonBenefitParticipant; 
+
+    Person -- Address;
+	Person -- PersonBenefitParticipant;
+	Benefit -- PersonBenefitParticipant;
+	label = "\n\nEntity Relation Diagram\ndrawn by NEATO";
+	fontsize="20";
+}

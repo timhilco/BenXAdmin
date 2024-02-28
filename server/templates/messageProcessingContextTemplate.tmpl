@@ -1,0 +1,26 @@
+{{define "segment"}}
+ Segment:  {{.SegmentDefinitionId}}
+  Process State - {{.BusinessProcessState}}
+  Segement State - {{.SegmentState}}
+  Waiting Task Id - {{.WaitingTaskId}}
+{{- end }}
+*****************************************************************
+MessageProcessingContext
+------------------------------------
+Message: {{.Message.GetMessageId}} 
+ {{.Message.GetMessageDfnId}}
+ {{.Message.GetMessageName}}
+ -------------
+Person: {{.Person.InternalId }}
+ {{.Person.FirstName}} {{.Person.LastName}}
+ -------------
+PersonBusiness: {{.PersonBusinessProcess.ReferenceNumber}} 
+ {{.PersonBusinessProcess.InternalId}} 
+ State - {{.PersonBusinessProcess.State}} 
+ SourceEventReferenceNumber - {{.PersonBusinessProcess.SourceEventReferenceNumber}} 
+ SourceType - {{.PersonBusinessProcess.SourceType}} 
+ {{- range .PersonBusinessProcess.SegmentStates}}{{template "segment" .}}{{- end }}
+ -------------
+BusinessProcessDefiniion:  {{.BusinessProcessDefinition.InternalId}} 
+ Name - {{.BusinessProcessDefinition.Name}}
+***************************************************************

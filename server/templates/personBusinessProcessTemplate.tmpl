@@ -1,0 +1,22 @@
+{{define "segment"}}
+Segment Id: {{.SegmentDefinitionId}}
+Business Process State: {{.BusinessProcessState}}
+Segment State: {{if eq .SegmentState 0}}OPEN{{else if eq .SegmentState 1}}CLOSED{{else if eq  .SegmentState  2}}UNKNOWN{{end}}
+Waiting Task Id: {{.WaitingTaskId}}
+==================
+{{- end }}
+*****************************************************************
+Person Business Process
+*****************************************************************
+Business Process Reference Number:  {{.ReferenceNumber}}
+Person ID:  {{.PersonId}}
+Business Process:  {{.BusinessProcessDefinitionId}}
+Effective Date:  {{.EffectiveDate}}
+Creation Date:  {{.CreationDate}}
+State:  {{.State}} -  {{if eq .State 0}}OPEN{{else if eq .State 1}}CLOSED{{else if eq  .State  2}}UNKNOWN{{end}}
+
+--------  Segments  ----------
+{{- range .SegmentStates}}{{template "segment" .}}{{- end }}
+-------   Data   -------------
+{{.BusinessProcessData}}
+=================================================================

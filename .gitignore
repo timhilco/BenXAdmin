@@ -1,0 +1,16 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+**/.Ds_Store
+**/__debug*
+**/*.xlsx
+server/MockData/*.*
+.vscode
+
+webapp/node_modules
+webapp/build
+webapp/npm-debug.log*

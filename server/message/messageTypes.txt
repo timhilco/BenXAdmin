@@ -1,0 +1,15 @@
+Events
+
+PE0001 - Person Business Process Data Object Update
+PE0002 - Carrier Report Date Timestamp Clock Tick
+PE0003 - Confirmation Statement Date Timestamp Clock Tick
+PE0004 - Release Payroll Date Timestamp Clock Tick
+PE0005 - New Day Clock Tick
+PE0006 - POI Requirement Update
+PE0007 _ Participant Reporting State Update
+
+Commands
+PC0001 - Accept Enrollment Elections
+PC0002 - Update POI Response
+
+	

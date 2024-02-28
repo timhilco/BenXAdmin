@@ -1,0 +1,16 @@
+<!-- forms.html -->
+{{if .Success}}
+    <h1>Thanks for your message!</h1>
+{{else}}
+    <h1>Submit Event to Open Enrollment Form</h1>
+    <form method="POST">
+        <label>Person/Reference Id: </label>
+        <input type="text" name="referenceNumber" value="10"><br />
+        <label>Event Id: </label>
+        <input type="text" name="eventId" value="PE0002"><br />
+        <input type="checkbox" id="isKafka" name="isKafka" value="checked">
+        <label for="isKafka">Submit as Kafka Event</label><br>
+       
+        <input type="submit">
+    </form>
+{{end}}

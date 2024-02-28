@@ -1,0 +1,22 @@
+{{define "preference"}}
+Contact Point Type: {{.ContactPointType}}
+Contact Point Class : {{.ContactPointClass}}
+-- History --
+{{- range .ContractPreferencePeriods}}
+Effective: {{.EffectiveBeginDate}} - {{.EffectiveEndDate}}
+Contact Point Id: {{.ContactPointId}}
+Contact Point: {{.ContactPoint}}
+{{- end }}
+==========================================================
+{{- end }}
+*****************************************************************
+Person: {{.FirstName}} {{.LastName}}
+*****************************************************************
+Internal Id:   {{.InternalId}}
+Person ID (External):  {{.ExternalId}}
+First Name: {{.FirstName}}
+Last Name: {{.LastName}}
+Birth Date: {{.BirthDate}}
+-------------------- Contact Points -----------------------------
+{{- range .ContactPreferenceHistory}}{{template "preference" .}}{{- end }}
+-----------------------------------------------------------------

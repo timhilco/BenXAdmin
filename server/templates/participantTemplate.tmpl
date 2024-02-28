@@ -1,0 +1,15 @@
+{{define "period"}}
+Coverage Start Date: {{.CoverageStartDate}}
+Coverage End Date: {{.CoverageEndDate}}
+Elected Coverage Level: {{.ElectedCoverageLevel}}
+==========================================================
+{{- end }}
+*****************************************************************
+Participant
+*****************************************************************
+Internal Id:   {{.InternalId}}
+Person ID:  {{.PersonId}}
+Benefit ID:  {{.BenefitId}}
+-------------------- Coverage History -----------------------------
+{{- range .CoverageHistory.CoveragePeriods}}{{template "period" .}}{{- end }}
+-----------------------------------------------------------------

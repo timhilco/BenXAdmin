@@ -1,0 +1,10 @@
+{{if .Success}}
+    <h1>Thanks for your message!</h1>
+{{else}}
+    <h1>Job Submission</h1>
+    <form method="POST">
+        <input type="checkbox" id="isAnnualEnrollmentJob" name="isAnnualEnrollmentJob" value="checked">
+        <label for="isAnnualEnrollmentJob">Start Annual Enrollment Job</label><br>     
+        <input type="submit">
+    </form>
+{{end}}

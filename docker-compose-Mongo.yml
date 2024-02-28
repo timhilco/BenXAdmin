@@ -1,0 +1,14 @@
+---
+version: '2'
+services:
+  db:
+    image: mongo:6.0.3
+    environment:
+      MONGO_INITDB_DATABASE: person
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-db.js:/docker-entrypoint-initdb.d/init.js
+networks:
+  localnet:
+    attachable: true

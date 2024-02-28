@@ -1,0 +1,207 @@
+digraph ER { 
+	fontname="Helvetica,Arial,sans-serif"
+ 	node [fontname="Helvetica,Arial,sans-serif"]
+	edge [fontname="Helvetica,Arial,sans-serif",len=2]
+	label = "Open Enrollment State Diagram\nLegend\n- Solid Black - Normal Path\n- Solid Gold - Person Event\n- Dashed Gold - System Event\n- Solid Red - Conditional Path";
+    //label = 
+    //        <table cellborder="0" style="rounded">
+    //            <tr><td>Send Enrollment <br/>Preview Communication</td></tr>
+    //            <hr/>
+   //             <tr><td></td></tr>
+    //        </table>
+        
+	rankdir="LR"
+	fontsize=20;
+    overlap=scale;
+// Terminal Nodes
+	node [shape=circle;style=filled;color=lightgray;height=1;fixedsize=true]; 
+	Start;
+	PayrollStart[label="Start"];
+	CarrierStart[label="Start"];
+    DvStart[label="Start"];
+    EoiStart[label="Start"];
+	PayrollFinish[label="Finish"];
+	CarrierFinish[label="Finish"];
+    DvFinish[label="Finish"];
+    EoiFinish[label="Finish"];
+	Finish;
+// Merge Nodes
+	node [shape=circle;style=filled;color=yellow;height=.5;fixedsize=true]; 
+	ValidElections[label= "V"];
+	Complete[label= "C"];
+// End Nodes
+	node [shape=circle;style=filled;color=black;height=.25;fixedsize=true]; 
+	//End1[label=""];
+	//End2[label=""];
+	//End3[label=""];
+	//End4[label=""];
+	//End5[label=""];
+	//End6[label=""];
+//Task	Nodes
+	node [shape=box;style="rounded";color="blue";fixedsize=false]; 
+    Task0[label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Send Enrollment <br/>Preview Communication</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    EnrollBenefits[label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Enroll<br/>Benefit Elections</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    ProcessDvVerification [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Process Dependent <br/> Verification Response</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    ProcessEOIResponse [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Process Evidence of <br/> Insurability Response</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    Task4P [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Release Payroll Elections for <br/>Payroll Processing</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    Task4C [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Release Coverage Elections for <br/>Carrier Processing</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    Task5 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Close <br/>Open Enrollment</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    Task6[label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Send Post Election<br/>Communication</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    //DV Nodes
+    /*
+    DvTask0 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Dv Request</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    DvTask1 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Determine DV Answer</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    //EOI Nodes
+    
+    EoiTask0 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td> EOI Request</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    EoiTask1 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Determine EOI Answer</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+        */
+    PayrollTask1 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Report Coverage Elections for <br/>Payroll Processing</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+    CarrierTask1 [label = <
+            <table cellborder="0" style="rounded">
+                <tr><td>Report Coverage Elections for <br/>Carrier Processing</td></tr>
+                <hr/>
+                <tr><td></td></tr>
+            </table>
+        > margin=0 shape=none]
+        
+// Events	
+	node [shape=box;style="invis"]; 
+	E1
+	E2
+    E3
+    E4
+    E5
+    E6
+    
+//EDGES	
+     edge [color="black";penwidth=3.0];
+Start -> Task0
+Task0 -> EnrollBenefits
+EnrollBenefits -> ValidElections[label="VALID"]
+ValidElections -> Task6 
+Task4C -> Complete [label="COMPLETE"]
+Task4P -> Complete
+Task6 -> Complete
+Task5 -> Finish;
+ValidElections -> Task4C
+ValidElections -> Task4P
+	edge [color="red";penwidth=1.0];
+EnrollBenefits -> DvStart
+EnrollBenefits -> EoiStart
+	edge [color="black";penwidth=1.0, style="dashed"];
+Task4P -> PayrollTask1
+Task4C -> CarrierTask1
+
+//Person Events Edges
+	edge [style="solid";color="gold";penwidth=4.0]
+E1 -> EnrollBenefits [label="(C) Update Benefit Elections"];
+//Admin Events Edges
+	edge [style="dashed";color="gold";penwidth=3.0]
+E4 -> Task4P [label="Payroll Interface Date"];
+E5 -> Task4C [label="Carrier Interface Date"];
+E7 -> Task6 [label="Confirmation Communication Send Date"];
+Complete -> Task5 [label="Join C completed"];
+subgraph cluster_dv {
+	label = "Dependent Verification";
+	edge [color="black";penwidth=1.0,style="solid"];
+    DvStart -> ProcessDvVerification -> DvFinish
+}
+subgraph cluster_eoi {
+	label = "Evidence of Insurability";
+	edge [color="black";penwidth=1.0,style="solid"];
+    EoiStart  -> ProcessEOIResponse -> EoiFinish
+}
+subgraph cluster_payroll {
+	label = "Payroll Interface\n Processing";
+	edge [color="black";penwidth=1.0,style="solid"];
+PayrollStart -> PayrollTask1 -> PayrollFinish
+
+
+}
+subgraph cluster_carrier {
+	label = "Carrier Interface\nProcessing";
+	edge [color="black";penwidth=1.0,style="solid"];
+ 
+CarrierStart -> CarrierTask1 -> CarrierFinish
+
+}
+}

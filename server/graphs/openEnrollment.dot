@@ -1,0 +1,132 @@
+ digraph BusinessProcessDefinition { 
+	fontname="Helvetica,Arial,sans-serif"
+ 	node [fontname="Helvetica,Arial,sans-serif", height=1.5]
+	edge [fontname="Helvetica,Arial,sans-serif",len=2]
+	label = "Open Enrollment";
+	fontsize=20;
+	overlap=scale;
+	rankdir="LR";
+ 	// Terminal Nodes 
+	node [shape=circle;style=filled;color=lightgray;height=1;fixedsize=true]; 
+ 	// Merge Nodes 
+	node [shape=circle;style=filled;color=yellow;height=.5;fixedsize=true];  
+ 	//Task Nodes 
+ 	node [shape=box;style=rounded;color=blue;fixedsize=false];  
+     S1_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Start Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S1_T2[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Communication Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S3_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Carrier Report</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S5_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Finish Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S4_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Post Enrollment Communication Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S5_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Finish Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S2_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Payroll Report</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S5_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Finish Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S1_T3[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Accept Elections Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S2_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Payroll Report</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S5_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Finish Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S3_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Carrier Report</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S5_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Finish Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S4_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Post Enrollment Communication Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+     S5_T1[label = <
+          <table cellborder="0" style="rounded">
+             <tr><td>Enrollment Finish Task</td></tr>
+             <hr/>
+             <tr><td></td></tr>
+          </table>
+       > margin=0 shape=none]
+ 	//Events 
+ 	node [shape=box;style=rounded;color=blue;fixedsize=false];  
+ 	//Edges 
+ 	edge [color=black;penwidth=3.0];  
+     S1_T1 -> S1_T2
+     S1_T2 -> S1_T3
+     S1_T3 -> S3_T1
+     S3_T1 -> S5_T1
+     S1_T3 -> S4_T1
+     S4_T1 -> S5_T1
+     S1_T3 -> S2_T1
+     S2_T1 -> S5_T1
+}

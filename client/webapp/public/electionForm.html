@@ -1,0 +1,46 @@
+<!-- forms.html -->
+{{if .Success}}
+    <h1>Thanks for your message!</h1>
+{{else}}
+    <h1>Open Enrollment Election Form</h1>
+    <form method="POST">
+        <label>Person/Reference Id: </label>
+        <input type="text" name="personId" value="10"><br />
+        <label><b>Medical</b></label><br />
+        <label>Benefit Id: </label>
+        <input type="text" name="mBenefitId" value="B001"><br />
+        <label>Plan Id: </label>
+        <input type="text" name="mBenefitPlanId" value="B001-BP001"><br />
+        <label>Coverage Level Id: </label>
+        <input type="text" name="mCoverageLevelId" value="1"><br /><br />
+        <label><b>Dental</b></label><br />
+        <label>Benefit Id: </label>
+        <input type="text" name="dBenefitId" value="B002"><br />
+        <label>Plan Id: </label>
+        <input type="text" name="dBenefitPlanId" value="B002-BP002"><br />
+        <label>Coverage Level Id: </label>
+        <input type="text" name="dCoverageLevelId" value="1"><br /><br />
+        <label><b>Basic Employee Life</b></label><br />
+        <label>Benefit Id: </label>
+        <input type="text" name="elBenefitId" value="B003"><br />
+        <label>Plan Id: </label>
+        <input type="text" name="elBenefitPlanId" value="B003-BP001"><br />
+        <label>Coverage Amount: </label>
+        <input type="text" name="elCoverageLevelId" value="1"><br /><br />
+        <label><b>Health Case FSA</b></label><br />
+        <label>Benefit Id: </label>
+        <input type="text" name="hcBenefitId" value="B004"><br />
+        <label>Plan Id: </label>
+        <input type="text" name="hcBenefitPlanId" value="B004-BP001"><br />
+        <label>Contribution: </label>
+        <input type="text" name="hcContribution" value="1000"><br /><br />
+        <label><b>Dependent Case FSA</b></label><br />
+        <label>Benefit Id: </label>
+        <input type="text" name="dcBenefitId" value="B005"><br />
+        <label>Plan Id: </label>
+        <input type="text" name="dcBenefitPlanId" value="B005-BP001"><br />
+        <label>Contribution: </label>
+        <input type="text" name="dcContribution" value="500"><br /><br />
+        <input type="submit">
+    </form>
+{{end}}
