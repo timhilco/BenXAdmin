@@ -188,7 +188,8 @@ func (ced *ChannelMessageBroker) GetNumberOfPartitions() int {
 
 func findInterestedParties(ctx context.Context, rc *ResourceContext, event message.Message, refNum string) ([]*PersonBusinessProcess, error) {
 	interestedParties := make([]*PersonBusinessProcess, 0)
-	pbp, _ := rc.GetBusinessProcessStore().GetPersonBusinessProcesses()
+	var config map[string]string
+	pbp, _ := rc.GetBusinessProcessStore().GetPersonBusinessProcesses(config)
 	for _, p := range pbp {
 		if p.SourceEventReferenceNumber == refNum {
 			interestedParties = append(interestedParties, p)

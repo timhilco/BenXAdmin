@@ -12,7 +12,7 @@ import (
 )
 
 func TestLoad_Benefit(t *testing.T) {
-	fileName := "./client/A1234/BenefitPlan_Rates_01012024.xlsx"
+	fileName := "./company/A1234/BenefitPlan_Rates_01012024.xlsx"
 	opts := slog.HandlerOptions{
 		//Level: slog.LevelInfo,
 		Level: slog.LevelDebug,

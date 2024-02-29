@@ -172,7 +172,8 @@ func SendElectionCommand(eventId string, messageBroker string) {
 	bpd := businessProcess.NewBusinessProcessDefinitionMock()
 	ev := datatypes.EnvironmentVariables{}
 	rc := businessProcess.NewResourceContext("batchJobs::SendPopulationEvent", personMongoDB, businessProcessMongoDB, bpd, planMongoDB, ed, ev)
-	population, _ := businessProcessMongoDB.GetPersonBusinessProcesses()
+	var config map[string]string
+	population, _ := businessProcessMongoDB.GetPersonBusinessProcesses(config)
 	businessProcessDefinitionId := "BP001"
 	slog.Debug("********************************")
 	slog.Debug("Starting Enrollment Population Event")
@@ -234,7 +235,7 @@ func SendPopulationEvent(eventId string, messageBroker string) {
 	bpd := businessProcess.NewBusinessProcessDefinitionMock()
 	ev := datatypes.EnvironmentVariables{}
 	rc := businessProcess.NewResourceContext("batchJobs::SendPopulationEvent", personMongoDB, businessProcessMongoDB, bpd, planMongoDB, ed, ev)
-	population, _ := businessProcessMongoDB.GetPersonBusinessProcesses()
+	population, _ := businessProcessMongoDB.GetPersonBusinessProcesses(nil)
 	businessProcessDefinitionId := "BP001"
 	slog.Debug("********************************")
 	slog.Debug("Starting Enrollment Population Event")

@@ -1,6 +1,8 @@
 package application
 
 import (
+	"benefitsDomain/apiResponse"
+	"benefitsDomain/domain/businessProcess"
 	"benefitsDomain/domain/person"
 	"encoding/json"
 	"errors"
@@ -66,7 +68,7 @@ func (a *Application) getPersonView(w http.ResponseWriter, r *http.Request) {
 	}
 	switch viewId {
 	case "profile":
-		personView := PersonProfileViewResponse{
+		personView := apiResponse.PersonProfileViewResponse{
 			InternalId: person.InternalId,
 			ExternalId: person.ExternalId,
 			FirstName:  person.FirstName,
@@ -81,9 +83,9 @@ func (a *Application) getPersonView(w http.ResponseWriter, r *http.Request) {
 			sendErr(w, http.StatusInternalServerError, err.Error())
 			return
 		}
-		ps := make([]Participant, 0)
+		ps := make([]apiResponse.Participant, 0)
 		for _, p := range participants {
-			p := Participant{
+			p := apiResponse.Participant{
 				BenefitId:  p.BenefitId,
 				InternalId: p.InternalId,
 				PersonId:   p.PersonId,
@@ -91,6 +93,29 @@ func (a *Application) getPersonView(w http.ResponseWriter, r *http.Request) {
 			ps = append(ps, p)
 		}
 		personView.Participants = ps
+		d2, _ := a.GetBusinessProcessDataStore()
+		config = make(map[string]string)
+		config["type"] = "person"
+		config["id"] = person.InternalId
+
+		businessProcesses, _ := d2.GetPersonBusinessProcesses(config)
+		bps := make([]apiResponse.BusinessProcess, 0)
+		for _, bp := range businessProcesses {
+			b := apiResponse.BusinessProcess{
+				InternalId:                  bp.InternalId,
+				ReferenceNumber:             bp.ReferenceNumber,
+				BusinessProcessDefinitionId: bp.BusinessProcessDefinitionId,
+				EffectiveDate:               bp.EffectiveDate.FormattedString(""),
+			}
+			switch bp.State {
+			case businessProcess.C_STATE_OPEN:
+				b.State = "Open"
+			case businessProcess.C_STATE_CLOSED:
+				b.State = "Closed"
+			}
+			bps = append(bps, b)
+		}
+		personView.BusinessProcesses = bps
 		err = json.NewEncoder(w).Encode(personView)
 		if err != nil {
 			sendErr(w, http.StatusInternalServerError, err.Error())

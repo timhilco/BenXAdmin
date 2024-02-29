@@ -29,7 +29,7 @@ type Event struct {
 func (a *Application) addBenefitProcessHandlers() {
 	a.router.HandleFunc("/api/personBusinessProcesses/{id}", a.getPersonBusinessProcessReport).Methods("GET")
 	a.router.HandleFunc("/api/personBusinessProcesses", a.getPersonBusinessProcessCollection).Methods("GET")
-	a.router.HandleFunc("/api/personBusinessProcesses/{type}", a.getPersonBusinessProcessesByType).Methods("GET")
+	//a.router.HandleFunc("/api/personBusinessProcesses/{type}", a.getPersonBusinessProcessesByType).Methods("GET")
 	a.router.HandleFunc("/api/personBusinessProcesses/{id}/elections", a.updatePersonBusinessProcessElections).Methods("PUT")
 	a.router.HandleFunc("/api/personBusinessProcesses/{id}/event", a.updatePersonBusinessProcessEvent).Methods("PUT")
 
@@ -57,8 +57,41 @@ func (a *Application) getPersonBusinessProcessReport(w http.ResponseWriter, r *h
 func (a *Application) getPersonBusinessProcessCollection(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	var id, queryType string
+	wherePredicate, ok := vars["where"]
+	var config map[string]string
+	if ok {
+		config = make(map[string]string)
+		parts := strings.Split(wherePredicate, "=")
+		id = parts[1]
+		if parts[0] == "type" {
+			queryType = "type"
+			config["type"] = "type"
+			config["id"] = id
+
+		} else if parts[0] == "person" {
+			queryType = "person"
+			config["type"] = "person"
+			config["id"] = id
+
+		} else {
+			queryType = "unknown"
+		}
+
+	} else {
+		queryType = "All"
+		config = nil
+	}
 	d, _ := a.GetBusinessProcessDataStore()
-	pbp, err := d.GetPersonBusinessProcesses()
+	var pbp []*businessProcess.PersonBusinessProcess
+	var err error
+	switch queryType {
+	case "All":
+		pbp, err = d.GetPersonBusinessProcesses(nil)
+	default:
+		pbp, err = d.GetPersonBusinessProcesses(config)
+	}
 	if err != nil {
 		sendErr(w, http.StatusInternalServerError, err.Error())
 		return

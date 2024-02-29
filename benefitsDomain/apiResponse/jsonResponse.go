@@ -1,4 +1,4 @@
-package application
+package apiResponse
 
 type PersonProfileViewResponse struct {
 	InternalId        string            `json:"internalId" bson:"internalId"`
@@ -6,6 +6,7 @@ type PersonProfileViewResponse struct {
 	FirstName         string            `json:"firstName" bson:"firstName"`
 	LastName          string            `json:"lastName" bson:"lastName"`
 	BirthDate         string            `json:"birthDate" bson:"birthDate"`
+	Workers           []Worker          `json:"workers" bson:"workers"`
 	Participants      []Participant     `json:"participants" bson:"participants"`
 	BusinessProcesses []BusinessProcess `json:"BusinessProcesses" bson:"businessProcesses"`
 }
@@ -15,5 +16,12 @@ type Participant struct {
 	BenefitId  string `json:"benefitId" bson:"benefitId"`
 }
 type BusinessProcess struct {
-	ReferenceNumber string `json:"referenceNumber" bson:"referenceNumber"`
+	InternalId                  string `json:"internalId" bson:"internalId"`
+	ReferenceNumber             string `json:"referenceNumber" bson:"referenceNumber"`
+	BusinessProcessDefinitionId string `json:"businessProcessDefinitionId" bson:"businessProcessDefinitionId"`
+	EffectiveDate               string `json:"effectiveDate" bson:"effectiveDate"`
+	State                       string `json:"state" bson:"state"`
+}
+type Worker struct {
+	Employer string `json:"employer" bson:"employer"`
 }

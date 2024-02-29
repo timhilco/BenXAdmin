@@ -7,20 +7,64 @@ import (
 	"log/slog"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (m BusinessProcessMongoDB) GetPersonBusinessProcesses() ([]*PersonBusinessProcess, error) {
+func (m BusinessProcessMongoDB) GetPersonBusinessProcesses(config map[string]string) ([]*PersonBusinessProcess, error) {
 	res, err := m.personBusinessProcessCollection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		slog.Error("Error while fetching personBusinessProcess:" + err.Error())
 		return nil, err
 	}
+	var qtype, id string
+	if config == nil {
+		qtype = "all"
+	} else {
+		qtype = config["type"]
+		id = config["id"]
+	}
 	var personBusinessProcess []*PersonBusinessProcess
-	err = res.All(context.TODO(), &personBusinessProcess)
-	if err != nil {
-		slog.Error("Error while decoding personBusinessProcess:" + err.Error())
-		return nil, err
+	findOptions := options.Find()
+	//findOptions.SetLimit()
+
+	switch qtype {
+	case "all":
+		err = res.All(context.TODO(), &personBusinessProcess)
+		if err != nil {
+			slog.Error("Error while decoding personBusinessProcess:" + err.Error())
+			return nil, err
+		}
+	default:
+		collection := m.personBusinessProcessCollection
+		// Passing bson.D{{}} as the filter matches all documents in the collection
+		var filter primitive.M
+		if qtype == "person" {
+			filter = bson.M{"personId": bson.D{{Key: "$eq", Value: id}}}
+		} else { // type
+			filter = bson.M{"businessProcessDefinitionId": bson.D{{Key: "$eq", Value: id}}}
+
+		}
+		//filter := bson.D{{}}
+
+		cur, err := collection.Find(context.TODO(), filter, findOptions)
+		if err != nil {
+			slog.Error(fmt.Sprintf("PersonBusinessProcessGet -> Filter Error: %s", err))
+		}
+		for cur.Next(context.TODO()) {
+
+			// create a value into which the single document can be decoded
+			var elem PersonBusinessProcess
+			err := cur.Decode(&elem)
+			if err != nil {
+				slog.Error(fmt.Sprintf("PersonBusinessProcess Get -> Decode Error ->%s", err))
+			}
+			personBusinessProcess = append(personBusinessProcess, &elem)
+		}
+
+		if err := cur.Err(); err != nil {
+			slog.Error(fmt.Sprintf("PersonBusinessProcessDB Get -> Cur Error ->%s", err))
+		}
 	}
 	return personBusinessProcess, nil
 }

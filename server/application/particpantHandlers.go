@@ -11,7 +11,7 @@ import (
 
 func (a *Application) addParticipantHandlers() {
 	a.router.HandleFunc("/api/participants", a.getParticipants).Methods("GET")
-	a.router.HandleFunc("/api/participantByInternalId/{id}", a.getParticipantByInternalId).Methods("GET")
+	a.router.HandleFunc("/api/participants/{id}", a.getParticipantByInternalId).Methods("GET")
 	a.router.HandleFunc("/api/participants/{pid}/benefits", a.getParticipantByPersonId).Methods("GET")
 	a.router.HandleFunc("/api/participants/{pid}/benefits/{bid}", a.getParticipantByPersonIdAndBenefitId).Methods("GET")
 
