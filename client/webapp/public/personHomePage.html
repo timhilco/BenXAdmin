@@ -23,13 +23,18 @@
     <h3>Benefit Profile</h3>
     <ul>
     {{ range .Participants}}
-    <li><a href="localhost:8080/api/participants/{{.InternalId}}/benefits/{{.BenefitId}}">{{.BenefitId}}- {{.BenefitPlanId}}</a></li>
+    <li><a href="http://localhost:8080/api/participants/{{.InternalId}}">Benefit: {{.BenefitId}}</a></li>
     {{end }}
-    </ul>
-    <h2>Person Business Processes</h2>
-    <ul>
+  </ul>
+  <h2>Person Business Processes</h2>
+  <ul>
     {{ range .BusinessProcesses}}
-    <li>{{.ReferenceNumber}}</li>
+    <li><a href="http://localhost:8080/api/personBusinessProcesses/{{.ReferenceNumber}}">Reference Number: {{.ReferenceNumber}}</a>
+      <p>Business Process: {{.BusinessProcessDefinitionId}}</p>
+      <p>Effective Date: {{.EffectiveDate}}</p>
+      <p>State: {{.State}}</p>
+    </li>
+
     {{end }}
     </ul>
   </body>

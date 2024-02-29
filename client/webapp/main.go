@@ -3,6 +3,7 @@ package main
 
 import (
 	"bytes"
+	"client/webapp/forms"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -38,7 +39,7 @@ func main() {
 	Templ2 = template.Must(template.ParseFiles("./public/eventForm.html"))
 	Templ3 = template.Must(template.ParseFiles("./public/jobSubmissionForm.html"))
 
-	InitializePerson()
+	forms.InitializePerson()
 	fileServer := http.FileServer(http.Dir("./public"))
 	http.Handle("/", fileServer)
 	http.HandleFunc("/election", handleElectionForm)
@@ -226,74 +227,4 @@ func handleJobSubmissionForm(w http.ResponseWriter, r *http.Request) {
 func determinePersonBusinessReferenceNumber(key string) string {
 	id := fmt.Sprintf("0%s-%s-00%s_BP001_20240101", key, key, key)
 	return id
-}
-
-var PersonIdTemplate *template.Template
-var PersonHomeTemplate *template.Template
-
-type PersonProfileViewResponse struct {
-	InternalId        string            `json:"internalId" bson:"internalId"`
-	ExternalId        string            `json:"externalId" bson:"externalId"`
-	FirstName         string            `json:"firstName" bson:"firstName"`
-	LastName          string            `json:"lastName" bson:"lastName"`
-	BirthDate         string            `json:"birthDate" bson:"birthDate"`
-	Workers           []Worker          `json:"workers" bson:"workers"`
-	Participants      []Participant     `json:"participants" bson:"participants"`
-	BusinessProcesses []BusinessProcess `json:"BusinessProcesses" bson:"businessProcesses"`
-}
-type Participant struct {
-	InternalId string `json:"internalId" bson:"internalId"`
-	PersonId   string `json:"personId" bson:"personId"`
-	BenefitId  string `json:"benefitId" bson:"benefitId"`
-}
-type BusinessProcess struct {
-	ReferenceNumber string `json:"referenceNumber" bson:"referenceNumber"`
-}
-type Worker struct {
-	Employer string `json:"employer" bson:"employer"`
-}
-
-func InitializePerson() {
-	PersonIdTemplate = template.Must(template.ParseFiles("./public/personIdForm.html"))
-	PersonHomeTemplate = template.Must(template.ParseFiles("./public/personHomePage.html"))
-	http.HandleFunc("/person", handlePersonForm)
-}
-func handlePersonForm(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		err0 := PersonIdTemplate.Execute(w, nil)
-		if err0 != nil {
-			log.Fatal(err0)
-		}
-		return
-	}
-	personId := r.FormValue("personId")
-	fmt.Println(personId)
-
-	url := "http://localhost:8080/api/persons/" + personId + "/view/profile"
-	response, err := http.Get(url)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer response.Body.Close()
-
-	fmt.Println("response Status:", response.Status)
-	fmt.Println("response Headers:", response.Header)
-	body, _ := io.ReadAll(response.Body)
-	fmt.Println("response Body:", string(body))
-	ppv := PersonProfileViewResponse{}
-	if err := json.Unmarshal(body, &ppv); err != nil {
-		log.Fatal(err)
-	}
-	/*_, err3 := w.Write(body)
-	if err3 != nil {
-		log.Fatal(err3)
-	}
-	*/
-	err0 := PersonHomeTemplate.Execute(w, ppv)
-	if err0 != nil {
-		log.Fatal(err0)
-	}
-
 }
