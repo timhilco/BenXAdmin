@@ -39,6 +39,9 @@ func (c *ResourceContext) SetMessageBroker(eb MessageBroker) {
 func (c *ResourceContext) SetEnvironmentVariables(ev datatypes.EnvironmentVariables) {
 	c.environmentVariables = ev
 }
+func (c *ResourceContext) Close() {
+	c.eventBroker.Close()
+}
 func NewResourceContext(creator string, p *db.PersonMongoDB, bp *BusinessProcessMongoDB, bpd BusinessProcessDefinitionDataStore,
 	plan *db.PlanMongoDB, eb MessageBroker, ev datatypes.EnvironmentVariables) *ResourceContext {
 	r := &ResourceContext{

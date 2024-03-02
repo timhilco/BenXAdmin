@@ -4,6 +4,7 @@ package main
 import (
 	"bytes"
 	"client/webapp/forms"
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -11,6 +12,11 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+	"time"
 )
 
 type OpenEnrollmentElectionRequest struct {
@@ -33,8 +39,51 @@ type Job struct {
 var Templ1 *template.Template
 var Templ2 *template.Template
 var Templ3 *template.Template
+var SignalCh = make(chan os.Signal, 1)
 
 func main() {
+	opts := slog.HandlerOptions{
+		//Level: slog.LevelInfo,
+		Level: slog.LevelDebug,
+	}
+	/*
+		ev := datatypes.EnvironmentVariables{
+			TemplateDirectory: "./templates/",
+		}
+	*/
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &opts))
+	slog.SetDefault(logger)
+	// Create a context to handle graceful shutdown
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// Create a WaitGroup to keep track of running goroutines
+	var wg sync.WaitGroup
+
+	// Start the HTTP server
+	wg.Add(1)
+	go startHTTPServer(ctx, &wg)
+
+	// Listen for termination signals
+
+	signal.Notify(SignalCh, syscall.SIGINT, syscall.SIGTERM)
+
+	// Wait for termination signal
+	<-SignalCh
+
+	// Start the graceful shutdown process
+	slog.Info("Gracefully shutting down HTTP server...")
+
+	// Cancel the context to signal the HTTP server to stop
+	cancel()
+
+	// Wait for the HTTP server to finish
+	wg.Wait()
+
+	slog.Info("Shutdown complete.")
+}
+
+func startHTTPServer(ctx context.Context, wg *sync.WaitGroup) {
+	defer wg.Done()
 	Templ1 = template.Must(template.ParseFiles("./public/electionForm.html"))
 	Templ2 = template.Must(template.ParseFiles("./public/eventForm.html"))
 	Templ3 = template.Must(template.ParseFiles("./public/jobSubmissionForm.html"))
@@ -45,14 +94,38 @@ func main() {
 	http.HandleFunc("/election", handleElectionForm)
 	http.HandleFunc("/event", handleEventForm)
 	http.HandleFunc("/job", handleJobSubmissionForm)
+	http.HandleFunc("/admin/shutdown", handleShutdown)
 
-	slog.Info("Web server is available on port 3000")
-	err := http.ListenAndServe(":3000", nil)
-	if err != nil {
-		fmt.Println(err)
+	server := &http.Server{
+		Addr:    ":3000",
+		Handler: nil,
 	}
-}
 
+	// Start the HTTP server in a separate goroutine
+	go func() {
+		slog.Info("Starting HTTP server on Port 3000..")
+		err := server.ListenAndServe()
+		if err != nil && err != http.ErrServerClosed {
+			fmt.Printf("HTTP server error: %s\n", err)
+		}
+	}()
+
+	// Wait for the context to be canceled
+	select {
+	case <-ctx.Done():
+		// Shutdown the server gracefully
+		slog.Info("<- ctx.Done in startHTTPServer-- Shutting down HTTP server gracefully...")
+		shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancelShutdown()
+
+		err := server.Shutdown(shutdownCtx)
+		if err != nil {
+			slog.Info("HTTP server shutdown error: %s\n", err)
+		}
+	}
+
+	slog.Info("HTTP server stopped.")
+}
 func handleElectionForm(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		err0 := Templ1.Execute(w, nil)
@@ -119,10 +192,11 @@ func handleElectionForm(w http.ResponseWriter, r *http.Request) {
 	}
 	defer response.Body.Close()
 
-	fmt.Println("response Status:", response.Status)
-	fmt.Println("response Headers:", response.Header)
+	slog.Info("response Status:" + response.Status)
+	s := fmt.Sprintf("response Header: %v", response.Header)
+	slog.Info(s)
 	body, _ := io.ReadAll(response.Body)
-	fmt.Println("response Body:", string(body))
+	slog.Info("response Body:" + string(body))
 
 	_, err3 := w.Write(body)
 	if err3 != nil {
@@ -169,10 +243,11 @@ func handleEventForm(w http.ResponseWriter, r *http.Request) {
 	}
 	defer response.Body.Close()
 
-	fmt.Println("response Status:", response.Status)
-	fmt.Println("response Headers:", response.Header)
+	slog.Info("response Status:" + response.Status)
+	s := fmt.Sprintf("response Headers: %v", response.Header)
+	slog.Info(s)
 	body, _ := io.ReadAll(response.Body)
-	fmt.Println("response Body:", string(body))
+	slog.Info("response Body:" + string(body))
 
 	_, err3 := w.Write(body)
 	if err3 != nil {
@@ -214,10 +289,11 @@ func handleJobSubmissionForm(w http.ResponseWriter, r *http.Request) {
 	}
 	defer response.Body.Close()
 
-	fmt.Println("response Status:", response.Status)
-	fmt.Println("response Headers:", response.Header)
+	slog.Info("response Status:" + response.Status)
+	s := fmt.Sprintf("response Headers: %v", response.Header)
+	slog.Info(s)
 	body, _ := io.ReadAll(response.Body)
-	fmt.Println("response Body:", string(body))
+	slog.Info("response Body:" + string(body))
 
 	_, err3 := w.Write(body)
 	if err3 != nil {
@@ -227,4 +303,7 @@ func handleJobSubmissionForm(w http.ResponseWriter, r *http.Request) {
 func determinePersonBusinessReferenceNumber(key string) string {
 	id := fmt.Sprintf("0%s-%s-00%s_BP001_20240101", key, key, key)
 	return id
+}
+func handleShutdown(w http.ResponseWriter, r *http.Request) {
+	SignalCh <- syscall.SIGTERM
 }

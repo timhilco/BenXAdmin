@@ -301,8 +301,8 @@ func (c KafkaMessageConsumer) ConsumeMessages(ctx context.Context, wg *sync.Wait
 			}
 		}
 	}
-
-	slog.Debug("Closing consumer")
+	s := fmt.Sprintf("Consumer - Closing Consumer: %v", c.kafkaConsumer)
+	slog.Debug(s)
 	c.kafkaConsumer.Close()
 
 }

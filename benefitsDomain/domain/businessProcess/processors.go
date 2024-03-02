@@ -269,8 +269,20 @@ func (c *KafkaMessageBroker) GetPublisher() *KafkaMessagePublisher {
 
 }
 func (c *KafkaMessageBroker) ClosePublisher() {
+	slog.Info("Closing Kafka Publisher")
 	kep := c.publisher
 	kep.Close()
+
+}
+func (c *KafkaMessageBroker) CloseConsumer() {
+	kec := c.consumer
+	if kec != nil {
+		slog.Info("Closing Kafka Consumer")
+		kec.Close()
+	} else {
+		slog.Info("Kafka Consumer already closed")
+
+	}
 
 }
 func (ked *KafkaMessageBroker) StartConsumingMessages(ctx context.Context, wg *sync.WaitGroup, rc *ResourceContext, sigchan chan os.Signal) {
@@ -306,7 +318,8 @@ func (ked *KafkaMessageBroker) GetNumberOfPartitions() int {
 }
 
 func (ked *KafkaMessageBroker) Close() error {
-
+	ked.ClosePublisher()
+	ked.CloseConsumer()
 	return nil
 }
 func (keb *KafkaMessageBroker) Publish(ctx context.Context, e message.Message, partition int) error {

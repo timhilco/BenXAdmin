@@ -1,10 +1,25 @@
 {{if .Success}}
-    <h1>Thanks for your message!</h1>
+<   h1>Thanks for your message!</h1>
 {{else}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>BenX - Job Submission</title>
+  </head>
+  <body>
     <h1>Job Submission</h1>
     <form method="POST">
-        <input type="checkbox" id="isAnnualEnrollmentJob" name="isAnnualEnrollmentJob" value="checked">
-        <label for="isAnnualEnrollmentJob">Start Annual Enrollment Job</label><br>     
-        <input type="submit">
+      <input
+        type="checkbox"
+        id="isAnnualEnrollmentJob"
+        name="isAnnualEnrollmentJob"
+        value="checked"
+      />
+      <label for="isAnnualEnrollmentJob">Start Annual Enrollment Job</label
+      ><br />
+      <input type="submit" />
     </form>
+  </body>
+</html>
 {{end}}

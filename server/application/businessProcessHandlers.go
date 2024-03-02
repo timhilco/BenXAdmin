@@ -102,19 +102,21 @@ func (a *Application) getPersonBusinessProcessCollection(w http.ResponseWriter, 
 	}
 
 }
+
+/*
 func (a *Application) getPersonBusinessProcessesByType(w http.ResponseWriter, r *http.Request) {
-	/*
-		w.Header().Set("Content-Type", "application/json")
-		vars := mux.Vars(r)
-		id := vars["id"]
-		businessProcess := db.CreateMockBusinessProcessDefinitionObjects(id)
-		s := businessProcess.Report()
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-Type", "text/html")
-		w.Write([]byte(s))
-	*/
+
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	id := vars["id"]
+	businessProcess := db.CreateMockBusinessProcessDefinitionObjects(id)
+	s := businessProcess.Report()
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(s))
 
 }
+*/
 func (a *Application) updatePersonBusinessProcessElections(w http.ResponseWriter, r *http.Request) {
 	// If the Content-Type header is present, check that it has the value
 	// application/json. Note that we parse and normalize the header to remove

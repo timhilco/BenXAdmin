@@ -23,5 +23,9 @@ type BusinessProcess struct {
 	State                       string `json:"state" bson:"state"`
 }
 type Worker struct {
-	Employer string `json:"employer" bson:"employer"`
+	InternalId       string `json:"internalId" bson:"internalId"`
+	WorkerId         string `json:"workerId" bson:"workerId"`
+	Employer         string `json:"employer" bson:"employer"`
+	Pay              string `json:"pay" bson:"pay"`
+	EmploymentStatus string `json:"employmentStatus" bson:"employmentStatus"`
 }

@@ -12,19 +12,64 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (m PersonMongoDB) GetWorkers() ([]*personRoles.Worker, error) {
+func (m PersonMongoDB) GetWorkers(config map[string]string) ([]*personRoles.Worker, error) {
 	res, err := m.workerCollection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		slog.Error("Error while fetching workers:" + err.Error())
 		return nil, err
 	}
-	var worker []*personRoles.Worker
-	err = res.All(context.TODO(), &worker)
-	if err != nil {
-		slog.Error("Error while decoding workers:" + err.Error())
-		return nil, err
+	var workers []*personRoles.Worker
+	var aPersonId, keyType string
+	keyType = config["keyType"]
+	aPersonId = config["PersonId"]
+	var filter primitive.M
+	var results []*personRoles.Worker
+	switch keyType {
+
+	case "PersonId":
+		slog.Debug("Worker -> Get documents for Person (External): " + aPersonId)
+		filter = bson.M{"personId": bson.D{{Key: "$eq", Value: aPersonId}}}
+
+		// Passing bson.D{{}} as the filter matches all documents in the workerCollection
+		//filter := bson.D{{}}
+		findOptions := options.Find()
+		cur, err := m.workerCollection.Find(context.TODO(), filter, findOptions)
+		if err != nil {
+			slog.Error(fmt.Sprintf("WorkerGet -> Filter Error: %s", err))
+		}
+
+		// Finding multiple documents returns a cursor
+		// Iterating through the cursor allows us to decode documents one at a time
+		for cur.Next(context.TODO()) {
+
+			// create a value into which the single document can be decoded
+			var elem personRoles.Worker
+			err := cur.Decode(&elem)
+			if err != nil {
+				slog.Error(fmt.Sprintf("Worker Get -> Decode Error ->%s", err))
+			}
+
+			results = append(results, &elem)
+		}
+
+		if err := cur.Err(); err != nil {
+			slog.Error(fmt.Sprintf("WorkerDB Get -> Cur Error ->%s", err))
+		}
+
+		// Close the cursor once finished
+		cur.Close(context.TODO())
+		if len(results) == 0 {
+			return nil, errors.New("worker not found")
+		}
+		workers = results
+	default:
+		err = res.All(context.TODO(), &workers)
+		if err != nil {
+			slog.Error("Error while decoding workers:" + err.Error())
+			return nil, err
+		}
 	}
-	return worker, nil
+	return workers, nil
 }
 
 // GetWorker gets documents from the Worker Collection

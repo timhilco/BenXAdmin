@@ -23,13 +23,46 @@ func (a *Application) addWorkerHandlers() {
 }
 func (a *Application) getWorkers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	var id, queryType string
+	wherePredicate, ok := vars["where"]
+	var config map[string]string
+	if ok {
+		config = make(map[string]string)
+		parts := strings.Split(wherePredicate, "=")
+		id = parts[1]
+		if parts[0] == "type" {
+			queryType = "type"
+			config["type"] = "type"
+			config["id"] = id
+
+		} else if parts[0] == "person" {
+			queryType = "person"
+			config["type"] = "person"
+			config["id"] = id
+
+		} else {
+			queryType = "unknown"
+		}
+
+	} else {
+		queryType = "All"
+		config = nil
+	}
 	d, _ := a.GetPersonDataStore()
-	persons, err := d.GetWorkers()
+	var workers []*personRoles.Worker
+	var err error
+	switch queryType {
+	case "All":
+		workers, err = d.GetWorkers(nil)
+	default:
+		workers, err = d.GetWorkers(config)
+	}
 	if err != nil {
 		sendErr(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	err = json.NewEncoder(w).Encode(persons)
+	err = json.NewEncoder(w).Encode(workers)
 	if err != nil {
 		sendErr(w, http.StatusInternalServerError, err.Error())
 	}

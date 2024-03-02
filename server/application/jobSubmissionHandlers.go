@@ -17,6 +17,10 @@ func (a *Application) addJobSubmissionHandlers() {
 	a.router.HandleFunc("/api/jobSubmission", a.postJobSubmission).Methods("POST")
 
 }
+func (a *Application) addAdminHandlers() {
+	a.router.HandleFunc("/api/admin/shutdown", a.handleShutDown).Methods("GET")
+
+}
 
 type Job struct {
 	JobName string `json:"jobName"`

@@ -5,6 +5,7 @@ import (
 	"benefitsDomain/domain/businessProcess"
 	"benefitsDomain/domain/db"
 	"encoding/json"
+	"syscall"
 
 	"log/slog"
 	"net/http"
@@ -24,6 +25,9 @@ type Application struct {
 func (a *Application) Serve() error {
 	slog.Info("Web server is available on port 8080")
 	return http.ListenAndServe(":8080", a.router)
+}
+func (a *Application) GetRouter() *mux.Router {
+	return a.router
 }
 func (a *Application) GetPersonDataStore() (*db.PersonMongoDB, error) {
 	return a.personDataStore, nil
@@ -49,6 +53,8 @@ func NewApplication(p *db.PersonMongoDB, bp *businessProcess.BusinessProcessMong
 	app.addWorkerHandlers()
 	app.addBenefitProcessHandlers()
 	app.addJobSubmissionHandlers()
+	app.addAdminHandlers()
+
 	return app
 }
 func NewApplication2(personMongoDB *db.PersonMongoDB, businessProcessMongoDB *businessProcess.BusinessProcessMongoDB, planMongoDB *db.PlanMongoDB, ev datatypes.EnvironmentVariables) Application {
@@ -102,4 +108,12 @@ func StartConsumer(
 	configMap["client.id"] = "BenX"
 	configMap["group.id"] = "Hilco1"
 	batchjobs.StartKafkaMessageConsumer(personMongoDB, businessProcessMongoDB, configMap, bpd, planMongoDB, ev)
+}
+func (a *Application) Close() {
+	slog.Info("Closing Application")
+	a.resourceContext.Close()
+}
+func (a *Application) handleShutDown(w http.ResponseWriter, r *http.Request) {
+	syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
+
 }

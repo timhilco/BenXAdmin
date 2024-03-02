@@ -78,6 +78,23 @@ func (a *Application) getPersonView(w http.ResponseWriter, r *http.Request) {
 		config := make(map[string]string)
 		config["keyType"] = "PersonId"
 		config["PersonId"] = person.InternalId
+		workers, err := d.GetWorkers(config)
+		if err != nil {
+			sendErr(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		ws := make([]apiResponse.Worker, 0)
+		for _, w := range workers {
+			w := apiResponse.Worker{
+				InternalId:       w.InternalId,
+				WorkerId:         w.WorkerId,
+				Employer:         w.Employer,
+				Pay:              w.Pay.FormattedString(""),
+				EmploymentStatus: w.EmploymentStatus,
+			}
+			ws = append(ws, w)
+		}
+		personView.Workers = ws
 		participants, err := d.GetParticipants(config)
 		if err != nil {
 			sendErr(w, http.StatusInternalServerError, err.Error())

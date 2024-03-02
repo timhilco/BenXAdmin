@@ -58,6 +58,14 @@ func (f BigFloat) String() string {
 	s := fmt.Sprintf("%.10g", x)
 	return s
 }
+func (f BigFloat) FormattedString(pattern string) string {
+	x := f.aBigMathFloat
+	if x == nil {
+		return "NaN"
+	}
+
+	return f.String()
+}
 func (f BigFloat) DebugString() string {
 	x := f.aBigMathFloat
 	s := fmt.Sprintf("x = %.10g (%s, prec = %d, acc = %s)\n", x, x.Text('p', 0), x.Prec(), x.Acc())

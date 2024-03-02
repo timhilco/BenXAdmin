@@ -6,3 +6,5 @@ neato -Gepsilon=.001 -Gstart=1000 -Tpdf ./BenefitsOverview.dot  -o ./BenefitsOve
 # neato -Tsvg ./BenefitsOverview.dot  -o ./BenefitsOverview.svg
 docker compose  -f "./docker-compose-dev.yml" up
 docker compose  -f -d "./docker-compose-working.yml" -d up
+sudo lsof -i :3000
+kill -9 <PID>

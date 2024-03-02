@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css" />
     <title>BenX - Person Home Page</title>
   </head>
 
@@ -17,7 +18,11 @@
     <h3>Employment Roles</h3>
     <ul>
     {{ range .Workers}}
-    <li>{{.Employer}}</li>
+    <li>    <li><a href="http://localhost:8080/api/workers/{{.InternalId}}">Employer: {{.Employer}}</a>
+      <p>WorkerId: {{.WorkerId}}</p>
+      <p>Pay: {{.Pay}}</p>
+      <p>Employment Status: {{.EmploymentStatus}}</p>
+    </li>
     {{end }}
     </ul>
     <h3>Benefit Profile</h3>

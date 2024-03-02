@@ -1,13 +1,27 @@
-# go-BenX
+# go-BenXAdmin
+
+BenXAdmin is a prototype Benefit Administration.
+
+The goal is to create a model for a next-generation benefit administration system.
+This is based on the authors past experience in building benefit administration systems combining all the best learnings from examining several benefit administration systems.
+
+It has the following key advantages over existing systems:
+* Next Generation Benefits Administration Domain Model for:
+** Person
+** Benefit Plan
+* Next Generation Business Process Model
+* Modern Run time Architecture 
+** Mongo for data storage
+** Event Architecture using Kafka
+* Modern Programming Model - Golang
+
 
 ## Environment setup
 
 You need to have [Go](https://golang.org/),
-[Node.js](https://nodejs.org/),
 [Docker](https://www.docker.com/), and
 [Docker Compose](https://docs.docker.com/compose/)
-(comes pre-installed with Docker on Mac and Windows)
-installed on your computer.
+
 
 Verify the tools by running the following commands:
 
@@ -18,9 +32,6 @@ docker --version
 docker-compose --version
 ```
 
-If you are using Windows you will also need
-[gcc](https://gcc.gnu.org/). It comes installed
-on Mac and almost all Linux distributions.
 
 ## Start in development mode
 
@@ -31,8 +42,7 @@ docker-compose -f docker-compose-dev.yml up
 ```
 
 This starts a local MongoDB on `localhost:27017`.
-The database will be populated with test records
-from the [init-db.js](init-db.js) file.
+
 
 Navigate to the `server` folder and start the back end:
 
@@ -42,21 +52,12 @@ go run server.go
 ```
 The back end will serve on http://localhost:8080.
 
-Navigate to the `webapp` folder, install dependencies,
-and start the front end development server by running:
+Navigate to the `client/webapp` folder, and start the front end development server by running:
 
 ```sh
-cd webapp
-npm install
-npm start
+cd client/webapp
+go run server.go
+
 ```
 The application will be available on http://localhost:3000.
  
-## Start in production mode
-
-Perform:
-```sh
-docker-compose up
-```
-This will build the application and start it together with
-its database. Access the application on http://localhost:8080.

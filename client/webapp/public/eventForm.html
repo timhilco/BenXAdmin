@@ -1,16 +1,30 @@
 <!-- forms.html -->
 {{if .Success}}
-    <h1>Thanks for your message!</h1>
+<h1>Thanks for your message!</h1>
 {{else}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>BenX - Home Page</title>
+  </head>
+  <body>
     <h1>Submit Event to Open Enrollment Form</h1>
     <form method="POST">
-        <label>Person/Reference Id: </label>
-        <input type="text" name="referenceNumber" value="10"><br />
-        <label>Event Id: </label>
-        <input type="text" name="eventId" value="PE0002"><br />
-        <input type="checkbox" id="isKafka" name="isKafka" value="checked">
-        <label for="isKafka">Submit as Kafka Event</label><br>
-       
-        <input type="submit">
+      <label>Person/Reference Id: </label>
+      <input type="text" name="referenceNumber" value="10" /><br />
+      <label>Event Id: </label>
+      <input type="text" name="eventId" value="PE0002" /><br />
+      <input type="checkbox" id="isKafka" name="isKafka" value="checked" />
+      <label for="isKafka">Submit as Kafka Event</label><br />
+      <input type="submit" />
     </form>
+    <p><strong>Key:</strong></p>
+    <p>PE0002: Release Carrier Reporting Date Hit</p>
+    <p>PE0003: Publish Confirmation Statement Date Hit</p>
+    <p>PE0004: Release Payroll Reporting Date Hit</p>
+    <p>:</p>
+  </body>
+</html>
 {{end}}
