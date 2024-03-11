@@ -5,6 +5,8 @@ import (
 	"benefitsDomain/domain/businessProcess"
 	"benefitsDomain/domain/db"
 	"encoding/json"
+	"fmt"
+	"os"
 	"syscall"
 
 	"log/slog"
@@ -20,6 +22,7 @@ type Application struct {
 	router                   *mux.Router
 	environmentVariables     datatypes.EnvironmentVariables
 	resourceContext          *businessProcess.ResourceContext
+	signalChannel            chan os.Signal
 }
 
 func (a *Application) Serve() error {
@@ -34,6 +37,9 @@ func (a *Application) GetPersonDataStore() (*db.PersonMongoDB, error) {
 }
 func (a *Application) GetBusinessProcessDataStore() (*businessProcess.BusinessProcessMongoDB, error) {
 	return a.businessProcessDataStore, nil
+}
+func (a *Application) SetSignalChannel(signalCh chan os.Signal) {
+	a.signalChannel = signalCh
 }
 
 func sendErr(w http.ResponseWriter, code int, message string) {
@@ -86,6 +92,7 @@ func NewApplication2(personMongoDB *db.PersonMongoDB, businessProcessMongoDB *bu
 	app.addWorkerHandlers()
 	app.addBenefitProcessHandlers()
 	app.addJobSubmissionHandlers()
+	app.addAdminHandlers()
 	return app
 }
 
@@ -114,6 +121,9 @@ func (a *Application) Close() {
 	a.resourceContext.Close()
 }
 func (a *Application) handleShutDown(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Shutting Down")
+	//sh := a.signalChannel
+	//sh <- syscall.SIGTERM
 	syscall.Kill(syscall.Getpid(), syscall.SIGTERM)
 
 }

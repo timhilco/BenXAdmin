@@ -2,7 +2,9 @@ package personRoles
 
 import (
 	"benefitsDomain/datatypes"
+	"bytes"
 	"encoding/json"
+	"html/template"
 	"log"
 	"os"
 )
@@ -10,7 +12,7 @@ import (
 type Worker struct {
 	InternalId           string             `json:"internalId" bson:"internalId"`
 	WorkerId             string             `json:"workerId" bson:"workerId"`
-	PersonId             string             `json:"personId" bson:"personId"`
+	PersonInternalId     string             `json:"personInternalId" bson:"personInternalId"`
 	Employer             string             `json:"employer" bson:"employer"`
 	Pay                  datatypes.BigFloat `json:"pay" bson:"pay"`
 	EmploymentStatus     string             `json:"employmentStatus" bson:"employmentStatus"`
@@ -42,4 +44,18 @@ func CreateWorkerFromJsonFile(filename string) (*Worker, error) {
 }
 func (w *Worker) GetCurrentPay() (datatypes.BigFloat, error) {
 	return w.Pay, nil
+}
+func (w *Worker) Report(ev datatypes.EnvironmentVariables) string {
+	dir := ev.TemplateDirectory
+	templateFile := dir + "workerTemplate.tmpl"
+	buf := new(bytes.Buffer)
+	tmpl, err := template.ParseFiles(templateFile)
+	if err != nil {
+		panic(err)
+	}
+	err = tmpl.Execute(buf, w)
+	if err != nil {
+		panic(err)
+	}
+	return buf.String()
 }

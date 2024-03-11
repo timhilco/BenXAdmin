@@ -80,8 +80,10 @@ func (a *Application) getPersonView(w http.ResponseWriter, r *http.Request) {
 		config["PersonId"] = person.InternalId
 		workers, err := d.GetWorkers(config)
 		if err != nil {
-			sendErr(w, http.StatusInternalServerError, err.Error())
-			return
+			if err.Error() != "worker not found" {
+				sendErr(w, http.StatusInternalServerError, err.Error())
+				return
+			}
 		}
 		ws := make([]apiResponse.Worker, 0)
 		for _, w := range workers {
@@ -97,17 +99,36 @@ func (a *Application) getPersonView(w http.ResponseWriter, r *http.Request) {
 		personView.Workers = ws
 		participants, err := d.GetParticipants(config)
 		if err != nil {
-			sendErr(w, http.StatusInternalServerError, err.Error())
-			return
+			if err.Error() != "participant not found" {
+				sendErr(w, http.StatusInternalServerError, err.Error())
+				return
+			}
 		}
 		ps := make([]apiResponse.Participant, 0)
 		for _, p := range participants {
-			p := apiResponse.Participant{
+			ap := apiResponse.Participant{
 				BenefitId:  p.BenefitId,
 				InternalId: p.InternalId,
 				PersonId:   p.PersonId,
 			}
-			ps = append(ps, p)
+			ch := p.CoverageHistory.CoveragePeriods[0]
+			ap.CoverageStartDate = ch.CoverageStartDate.FormattedString("")
+			ap.CoverageEndDate = ch.CoverageEndDate.FormattedString("")
+			ap.ElectedCoverageLevel = ch.ElectedCoverageLevel
+			ap.PayrollReportingState = ch.PayrollReportingState
+			ap.CarrierReportingState = ch.CarrierReportingState
+			ap.ElectedBenefitOfferingId = ch.ElectedBenefitOfferingId
+			ap.ActualBenefitOfferingId = ch.ActualBenefitOfferingId
+			ap.ElectedCoverageLevel = ch.ElectedCoverageLevel
+			ap.ActualCoverageLevel = ch.ActualCoverageLevel
+			ap.OfferedBenefitOfferingId = ch.OfferedBenefitOfferingId
+			ap.ActualCoverageAmount = ch.ActualCoverageAmount
+			ap.ElectedCoverageAmount = ch.ElectedCoverageAmount
+			ap.EmployeePreTaxCost = ch.EmployeePreTaxCost
+			ap.EmployerCost = ch.EmployerCost
+			ap.EmployeeAfterTaxCost = ch.EmployeeAfterTaxCost
+			ap.EmployerSubsidy = ch.EmployerSubsidy
+			ps = append(ps, ap)
 		}
 		personView.Participants = ps
 		d2, _ := a.GetBusinessProcessDataStore()

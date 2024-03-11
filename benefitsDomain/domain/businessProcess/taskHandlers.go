@@ -92,7 +92,11 @@ func (t *ElementalTask) acceptEnrollmentElections(ec *MessageProcessingContext) 
 			shouldCreateNewParticipant = true
 			participant, _ = personRoles.NewParticipant(personId, benefitId)
 		}
-		participant.ApplyEnrollmentElections(effectiveDate, election)
+		planDB := ec.ResourceContext.GetPlanDataStore()
+		benefit, _ := planDB.GetBenefit(benefitId)
+		newCoveragePeriod := pbp.CreateNewCoveragePeriodFromElections(election, benefit)
+		participant.ApplyNewCoveragePeriod(effectiveDate, newCoveragePeriod)
+		//participant.ApplyEnrollmentElections(effectiveDate, election)
 		if shouldCreateNewParticipant {
 			dataStore.InsertParticipant(participant)
 		} else {

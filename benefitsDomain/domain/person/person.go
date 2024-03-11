@@ -169,7 +169,7 @@ func CreatePersonFromJsonFile(filename string) (*Person, error) {
 }
 func (p *Person) Report(ev datatypes.EnvironmentVariables) string {
 	dir := ev.TemplateDirectory
-	templateFile := dir + "person.tmpl"
+	templateFile := dir + "personTemplate.tmpl"
 	buf := new(bytes.Buffer)
 	tmpl, err := template.ParseFiles(templateFile)
 	if err != nil {

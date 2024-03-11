@@ -18,8 +18,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var SignalCh = make(chan os.Signal, 1)
-
 func main() {
 	opts := slog.HandlerOptions{
 		//Level: slog.LevelInfo,
@@ -62,11 +60,11 @@ func main() {
 	go startHTTPServer(ctx, &wg, router)
 
 	// Listen for termination signals
-
-	signal.Notify(SignalCh, syscall.SIGINT, syscall.SIGTERM)
-
+	var signalCh = make(chan os.Signal, 1)
+	signal.Notify(signalCh, syscall.SIGINT, syscall.SIGTERM)
+	app.SetSignalChannel(signalCh)
 	// Wait for termination signal
-	<-SignalCh
+	<-signalCh
 
 	// Start the graceful shutdown process
 	slog.Info("Gracefully shutting down HTTP server...")
@@ -90,7 +88,7 @@ func startHTTPServer(ctx context.Context, wg *sync.WaitGroup, router *mux.Router
 
 	// Start the HTTP server in a separate goroutine
 	go func() {
-		slog.Info("Starting HTTP server on Port 3000..")
+		slog.Info("Starting HTTP server on Port 8080..")
 		err := server.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
 			fmt.Printf("HTTP server error: %s\n", err)
@@ -124,7 +122,8 @@ func startHTTPServer(ctx context.Context, wg *sync.WaitGroup, router *mux.Router
 			"mongodb://" + host + ":27017",
 		)
 	}
-*/
+
 func HandleShutdown(w http.ResponseWriter, r *http.Request) {
 	SignalCh <- syscall.SIGTERM
 }
+*/

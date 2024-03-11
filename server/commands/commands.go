@@ -258,7 +258,7 @@ func CreateRandomWorker(options map[string]interface{}, person *person.Person) *
 	internalId := fmt.Sprintf("%d", id)
 	worker.InternalId = internalId
 	worker.WorkerId = internalId
-	worker.PersonId = person.InternalId
+	worker.PersonInternalId = person.InternalId
 	worker.Employer = "Acme"
 
 	return &worker

@@ -1,13 +1,14 @@
 package commandDataStructures
 
 type OpenEnrollmentElectionRequest struct {
-	BenefitPlanElections []OpenEnrollmentElection `json:"benefitPlanElections"`
+	BenefitPlanElections []EnrollmentElection `json:"benefitPlanElections"`
 }
-type OpenEnrollmentElection struct {
-	BenefitId       string `json:"benefitId"`
-	BenefitPlanId   string `json:"benefitPlanId"`
-	CoverageLevelId string `json:"coverageLevelId"`
-	CoverageAmount  string `json:"coverageAmount"`
+type EnrollmentElection struct {
+	BenefitId          string `json:"benefitId"`
+	BenefitPlanId      string `json:"benefitPlanId"`
+	CoverageLevelId    string `json:"coverageLevelId"`
+	CoverageAmount     string `json:"coverageAmount"`
+	ContributionAmount string `json:"contributionAmount"`
 }
 
 type PayrollRelease struct {

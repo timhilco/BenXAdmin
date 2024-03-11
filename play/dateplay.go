@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/bsontype"
 )
@@ -21,7 +22,7 @@ func (v MyDate) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	return bson.MarshalValue(time.Time(v))
 }
 
-func (v *MyDate) UnmarshalBSONValue(t bsontype.Type, b []byte) error {go buid
+func (v *MyDate) UnmarshalBSONValue(t bsontype.Type, b []byte) error {
 	rv := bson.RawValue{
 		Type:  t,
 		Value: b,
@@ -62,6 +63,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Unmarshaled: %+v\n", res)
+	fmt.Printf("Unmarshalled: %+v\n", res)
 	fmt.Println("Output MyDate:", res.FieldD)
 }

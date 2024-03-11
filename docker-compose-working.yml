@@ -56,7 +56,7 @@ services:
       PORT: 9021
 
   db:
-    image: mongo:6.0.13
+    image: mongo:latest
     environment:
       MONGO_INITDB_DATABASE: person
     ports:

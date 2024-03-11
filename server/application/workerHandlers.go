@@ -1,6 +1,7 @@
 package application
 
 import (
+	"benefitsDomain/domain/businessProcess"
 	"benefitsDomain/domain/person/personRoles"
 	"encoding/json"
 	"errors"
@@ -72,14 +73,18 @@ func (a *Application) getWorker(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	d, _ := a.GetPersonDataStore()
-	person, err := d.GetWorker(id, "Person")
+	worker, err := d.GetWorker(id, "Person")
 	if err != nil {
 		sendErr(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	err = json.NewEncoder(w).Encode(person)
+	rc := businessProcess.ResourceContext{}
+	rc.SetEnvironmentVariables(a.environmentVariables)
+	s := worker.Report(a.environmentVariables)
+	_, err = w.Write([]byte(s))
 	if err != nil {
 		sendErr(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 }
 func (a *Application) insertWorker(w http.ResponseWriter, r *http.Request) {

@@ -35,13 +35,13 @@ func BuildCommand(id string, referenceNumber string) Message {
 	}
 
 	if id == "PC0001" {
-		elections := make([]commandDataStructures.OpenEnrollmentElection, 0)
-		medical := commandDataStructures.OpenEnrollmentElection{
+		elections := make([]commandDataStructures.EnrollmentElection, 0)
+		medical := commandDataStructures.EnrollmentElection{
 			BenefitId:     "B001",
 			BenefitPlanId: "BP001-002",
 		}
 		elections = append(elections, medical)
-		dental := commandDataStructures.OpenEnrollmentElection{
+		dental := commandDataStructures.EnrollmentElection{
 			BenefitId:     "B002",
 			BenefitPlanId: "BP002-001",
 		}

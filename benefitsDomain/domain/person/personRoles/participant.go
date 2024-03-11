@@ -27,23 +27,25 @@ const (
 	C_STATE_REPORTED
 )
 
+type BenefitPeriod interface {
+}
 type CoveragePeriod struct {
-	CoverageStartDate        string             `json:"coverageStartDate" bson:"coverageStartDate"`
-	CoverageEndDate          string             `json:"coverageEndDate" bson:"coverageEndDate"`
-	PayrollReportingState    int                `json:"payrollReportingState" bson:"payrollReportingState"`
-	CarrierReportingState    int                `json:"carrierReportingState" bson:"carrierReportingState"`
-	ElectedBenefitOfferingId string             `json:"electedBenefitOfferingId" bson:"electedBenefitOfferingId"`
-	ActualBenefitOfferingId  string             `json:"actualBenefitOfferingId" bson:"actualBenefitOfferingId"`
-	ElectedCoverageLevel     string             `json:"electedCoverageLevel" bson:"electedCoverageLevel"`
-	ActualCoverageLevel      string             `json:"actualCoverageLevel" bson:"actualCoverageLevel"`
-	OfferedBenefitOfferingId string             `json:"offeredBenefitOfferingId" bson:"offeredBenefitOfferingId"`
-	ActualCoverageAmount     datatypes.BigFloat `json:"actualCoverageAmount" bson:"actualCoverageAmount"`
-	ElectedCoverageAmount    datatypes.BigFloat `json:"electedCoverageAmount" bson:"electedCoverageAmount"`
-	EmployeePreTaxCost       datatypes.BigFloat `json:"employeePreTaxCost" bson:"employeePreTaxCost"`
-	EmployerCost             datatypes.BigFloat `json:"employerCost" bson:"employerCost"`
-	EmployeeAfterTax         datatypes.BigFloat `json:"employeeAfterTax" bson:"employeeAfterTax"`
-	EmployerSubsidy          datatypes.BigFloat `json:"employerSubsidy" bson:"employerSubsidy"`
-	LifeImputedIncome        datatypes.BigFloat `json:"lifeImputedIncome" bson:"lifeImputedIncome"`
+	CoverageStartDate        datatypes.YYYYMMDD_Date `json:"coverageStartDate" bson:"coverageStartDate"`
+	CoverageEndDate          datatypes.YYYYMMDD_Date `json:"coverageEndDate" bson:"coverageEndDate"`
+	PayrollReportingState    int                     `json:"payrollReportingState" bson:"payrollReportingState"`
+	CarrierReportingState    int                     `json:"carrierReportingState" bson:"carrierReportingState"`
+	ElectedBenefitOfferingId string                  `json:"electedBenefitOfferingId" bson:"electedBenefitOfferingId"`
+	ActualBenefitOfferingId  string                  `json:"actualBenefitOfferingId" bson:"actualBenefitOfferingId"`
+	ElectedCoverageLevel     string                  `json:"electedCoverageLevel" bson:"electedCoverageLevel"`
+	ActualCoverageLevel      string                  `json:"actualCoverageLevel" bson:"actualCoverageLevel"`
+	OfferedBenefitOfferingId string                  `json:"offeredBenefitOfferingId" bson:"offeredBenefitOfferingId"`
+	ActualCoverageAmount     datatypes.BigFloat      `json:"actualCoverageAmount" bson:"actualCoverageAmount"`
+	ElectedCoverageAmount    datatypes.BigFloat      `json:"electedCoverageAmount" bson:"electedCoverageAmount"`
+	EmployeePreTaxCost       datatypes.BigFloat      `json:"employeePreTaxCost" bson:"employeePreTaxCost"`
+	EmployerCost             datatypes.BigFloat      `json:"employerCost" bson:"employerCost"`
+	EmployeeAfterTaxCost     datatypes.BigFloat      `json:"employeeAfterTaxCost" bson:"employeeAfterTaxCost"`
+	EmployerSubsidy          datatypes.BigFloat      `json:"employerSubsidy" bson:"employerSubsidy"`
+	LifeImputedIncome        datatypes.BigFloat      `json:"lifeImputedIncome" bson:"lifeImputedIncome"`
 }
 type ContributionPeriod struct {
 	CoverageStartDate  string `json:"coverageStartDate" bson:"coverageStartDate"`
@@ -81,6 +83,7 @@ func NewParticipant(personId string, benefitId string) (*Participant, error) {
 	}
 	return &participant, nil
 }
+
 func (p *Participant) AddCoveragePeriodToCoverageHistory(cp CoveragePeriod, instruction string) {
 	ch := p.CoverageHistory
 	if ch.CoveragePeriods == nil {
@@ -101,14 +104,18 @@ func (ch *CoverageHistory) AddCoveragePeriod(cp CoveragePeriod, instruction stri
 	cps = append(cps, cp)
 	ch.CoveragePeriods = cps
 }
-func (p *Participant) ApplyEnrollmentElections(effectiveDate datatypes.YYYYMMDD_Date, election commandDataStructures.OpenEnrollmentElection) error {
+func (p *Participant) ApplyNewCoveragePeriod(effectiveDate datatypes.YYYYMMDD_Date, newCoveragePeriod CoveragePeriod) error {
+	p.AddCoveragePeriodToCoverageHistory(newCoveragePeriod, "")
+	return nil
+}
+func (p *Participant) ApplyEnrollmentElections(effectiveDate datatypes.YYYYMMDD_Date, election commandDataStructures.EnrollmentElection) error {
 	// Validate Election
 	// Close any current Period
 	// Get current
 	//ch := p.CoverageHistory
 	b, _ := datatypes.NewBigFloat(election.CoverageAmount)
 	coveragePeriod := CoveragePeriod{
-		CoverageStartDate:        string(effectiveDate),
+		CoverageStartDate:        effectiveDate,
 		PayrollReportingState:    C_STATE_UNREPORTED,
 		CarrierReportingState:    C_STATE_UNREPORTED,
 		ElectedBenefitOfferingId: election.BenefitPlanId,

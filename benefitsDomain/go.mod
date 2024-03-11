@@ -3,6 +3,7 @@ module benefitsDomain
 go 1.22.0
 
 require (
+	github.com/brianvoe/gofakeit/v7 v7.0.2
 	github.com/confluentinc/confluent-kafka-go/v2 v2.3.0
 	github.com/golang-module/carbon/v2 v2.3.9
 	github.com/google/uuid v1.6.0

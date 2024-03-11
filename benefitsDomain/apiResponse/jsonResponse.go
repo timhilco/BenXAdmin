@@ -1,5 +1,7 @@
 package apiResponse
 
+import "benefitsDomain/datatypes"
+
 type PersonProfileViewResponse struct {
 	InternalId        string            `json:"internalId" bson:"internalId"`
 	ExternalId        string            `json:"externalId" bson:"externalId"`
@@ -11,9 +13,25 @@ type PersonProfileViewResponse struct {
 	BusinessProcesses []BusinessProcess `json:"BusinessProcesses" bson:"businessProcesses"`
 }
 type Participant struct {
-	InternalId string `json:"internalId" bson:"internalId"`
-	PersonId   string `json:"personId" bson:"personId"`
-	BenefitId  string `json:"benefitId" bson:"benefitId"`
+	InternalId               string             `json:"internalId" bson:"internalId"`
+	PersonId                 string             `json:"personId" bson:"personId"`
+	BenefitId                string             `json:"benefitId" bson:"benefitId"`
+	CoverageStartDate        string             `json:"coverageStartDate" bson:"coverageStartDate"`
+	CoverageEndDate          string             `json:"coverageEndDate" bson:"coverageEndDate"`
+	PayrollReportingState    int                `json:"payrollReportingState" bson:"payrollReportingState"`
+	CarrierReportingState    int                `json:"carrierReportingState" bson:"carrierReportingState"`
+	ElectedBenefitOfferingId string             `json:"electedBenefitOfferingId" bson:"electedBenefitOfferingId"`
+	ActualBenefitOfferingId  string             `json:"actualBenefitOfferingId" bson:"actualBenefitOfferingId"`
+	ElectedCoverageLevel     string             `json:"electedCoverageLevel" bson:"electedCoverageLevel"`
+	ActualCoverageLevel      string             `json:"actualCoverageLevel" bson:"actualCoverageLevel"`
+	OfferedBenefitOfferingId string             `json:"offeredBenefitOfferingId" bson:"offeredBenefitOfferingId"`
+	ActualCoverageAmount     datatypes.BigFloat `json:"actualCoverageAmount" bson:"actualCoverageAmount"`
+	ElectedCoverageAmount    datatypes.BigFloat `json:"electedCoverageAmount" bson:"electedCoverageAmount"`
+	EmployeePreTaxCost       datatypes.BigFloat `json:"employeePreTaxCost" bson:"employeePreTaxCost"`
+	EmployerCost             datatypes.BigFloat `json:"employerCost" bson:"employerCost"`
+	EmployeeAfterTaxCost     datatypes.BigFloat `json:"employeeAfterTaxCost" bson:"employeeAfterTaxCost"`
+	EmployerSubsidy          datatypes.BigFloat `json:"employerSubsidy" bson:"employerSubsidy"`
+	LifeImputedIncome        datatypes.BigFloat `json:"lifeImputedIncome" bson:"lifeImputedIncome"`
 }
 type BusinessProcess struct {
 	InternalId                  string `json:"internalId" bson:"internalId"`

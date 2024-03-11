@@ -111,6 +111,13 @@ type CoverageTier struct {
 func (b *Benefit) GetBenefitPlans() []*CoverageBenefitPlan {
 	return b.CoverageBenefitPlans
 }
+func (b *Benefit) DetermineCoverageStartDate(enrollmentEffectiveDate datatypes.YYYYMMDD_Date) datatypes.YYYYMMDD_Date {
+	return enrollmentEffectiveDate
+}
+func (b *Benefit) DetermineCoverageEndDate(enrollmentEffectiveDate datatypes.YYYYMMDD_Date) datatypes.YYYYMMDD_Date {
+	s := "20250101"
+	return datatypes.YYYYMMDD_Date(s)
+}
 
 func (bp *CoverageBenefitPlan) GetRateTable() SimpleHealthCareRateTable {
 	return bp.Coverage.GetRateTable()

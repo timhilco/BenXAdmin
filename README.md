@@ -7,18 +7,27 @@ This is based on the authors past experience in building benefit administration 
 
 It has the following key advantages over existing systems:
 * Next Generation Benefits Administration Domain Model for:
-** Person
-** Benefit Plan
+    * Person
+    * Person Roles
+        * Employee/Worker
+        * Benefit Participant
+        * Covered Person/Dependent
+    * Benefit Plan
 * Next Generation Business Process Model
+    * Business Process Definition (Template)
+    * Person Business Process
 * Modern Run time Architecture 
-** Mongo for data storage
-** Event Architecture using Kafka
+    * Mongo for data storage
+    * Event Architecture using Kafka
+    * REST API
 * Modern Programming Model - Golang
+* Based on Solid Design Standards/Best Practices
 
 
 ## Environment setup
 
-You need to have [Go](https://golang.org/),
+You need to have:
+ [Go](https://golang.org/),
 [Docker](https://www.docker.com/), and
 [Docker Compose](https://docs.docker.com/compose/)
 
@@ -27,7 +36,6 @@ Verify the tools by running the following commands:
 
 ```sh
 go version
-npm --version
 docker --version
 docker-compose --version
 ```

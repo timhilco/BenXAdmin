@@ -104,11 +104,11 @@ func CreateFakeItWorker(options map[string]interface{}) *personRoles.Worker {
 	worker := personRoles.Worker{}
 
 	externalId := options["WorkerId"].(string)
-	personId := options["PersonId"].(string)
+	personInternalId := options["PersonInternalId"].(string)
 
 	worker.InternalId = gofakeit.UUID()
 	worker.WorkerId = externalId
-	worker.PersonId = personId
+	worker.PersonInternalId = personInternalId
 	worker.Employer = "ABC CORP"
 	pay := gofakeit.Float64Range(10000, 1000000)
 	s := strconv.FormatFloat(pay, 'g', -2, 32)

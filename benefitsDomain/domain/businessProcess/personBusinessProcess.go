@@ -2,6 +2,7 @@ package businessProcess
 
 import (
 	"benefitsDomain/datatypes"
+	"benefitsDomain/domain/benefitPlan"
 	"benefitsDomain/domain/person"
 	"benefitsDomain/domain/person/personRoles"
 	"context"
@@ -10,6 +11,7 @@ import (
 	"fmt"
 	"log/slog"
 	"server/message"
+	"server/message/commandDataStructures"
 	"strconv"
 	"strings"
 
@@ -442,4 +444,47 @@ func (pbp *PersonBusinessProcess) Close() {
 	slog.Info(" ######    Closing Business Process  ########")
 	slog.Info(" ############################################")
 	slog.Info(" ############################################")
+}
+
+const (
+	C_STATE_UNREPORTED = iota
+	C_STATE_REPORTED
+)
+
+func (pbp *PersonBusinessProcess) CreateNewCoveragePeriodFromElections(election commandDataStructures.EnrollmentElection, benefit *benefitPlan.Benefit) personRoles.CoveragePeriod {
+
+	b, _ := datatypes.NewBigFloat("0.0")
+	z, _ := datatypes.NewBigFloat(election.CoverageAmount)
+	coverageStartDate := benefit.DetermineCoverageStartDate(pbp.EffectiveDate)
+	coverageEndDate := benefit.DetermineCoverageEndDate(pbp.EffectiveDate)
+
+	coveragePeriod := personRoles.CoveragePeriod{
+		CoverageStartDate:        coverageStartDate,
+		CoverageEndDate:          coverageEndDate,
+		PayrollReportingState:    C_STATE_UNREPORTED,
+		CarrierReportingState:    C_STATE_UNREPORTED,
+		ElectedBenefitOfferingId: election.BenefitPlanId,
+		ElectedCoverageLevel:     election.CoverageLevelId,
+		ActualBenefitOfferingId:  "",
+		ActualCoverageLevel:      "",
+		OfferedBenefitOfferingId: "",
+		ActualCoverageAmount:     b,
+		ElectedCoverageAmount:    b,
+		EmployeePreTaxCost:       z,
+		EmployerCost:             z,
+		EmployeeAfterTaxCost:     z,
+		EmployerSubsidy:          z,
+		LifeImputedIncome:        z,
+	}
+	f, _ := datatypes.NewBigFloat("10.0")
+	coveragePeriod.EmployeePreTaxCost = f
+	f, _ = datatypes.NewBigFloat("20.0")
+	coveragePeriod.EmployerCost = f
+	f, _ = datatypes.NewBigFloat("30.0")
+	coveragePeriod.EmployeeAfterTaxCost = f
+	f, _ = datatypes.NewBigFloat("40.0")
+	coveragePeriod.EmployerSubsidy = f
+	f, _ = datatypes.NewBigFloat("50.0")
+	coveragePeriod.LifeImputedIncome = f
+	return coveragePeriod
 }

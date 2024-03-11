@@ -27,8 +27,8 @@ func (m PersonMongoDB) GetWorkers(config map[string]string) ([]*personRoles.Work
 	switch keyType {
 
 	case "PersonId":
-		slog.Debug("Worker -> Get documents for Person (External): " + aPersonId)
-		filter = bson.M{"personId": bson.D{{Key: "$eq", Value: aPersonId}}}
+		slog.Debug("Worker -> Get documents for Person (Internal): " + aPersonId)
+		filter = bson.M{"personInternalId": bson.D{{Key: "$eq", Value: aPersonId}}}
 
 		// Passing bson.D{{}} as the filter matches all documents in the workerCollection
 		//filter := bson.D{{}}
