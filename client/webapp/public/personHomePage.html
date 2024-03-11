@@ -2,42 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="personStyles.css" />
     <title>BenX - Person Home Page</title>
   </head>
 
   <body>
     <h1>Person Home Page</h1>
     <h2> {{.FirstName}} {{.LastName}}</h2>
-    <p>Internal Id:   {{.InternalId}}</p>
-    <p>Person ID (External):  {{.ExternalId}}</p>
-    <p>First Name: {{.FirstName}}</p>
-    <p>Last Name: {{.LastName}}</p>
-    <p>Birth Date: {{.BirthDate}}</p>
+    <p class="proles">Internal Id:   {{.InternalId}}</p>
+    <p class="proles">Person ID (External):  {{.ExternalId}}</p>
+    <p class="proles">First Name: {{.FirstName}}</p>
+    <p class="proles">Last Name: {{.LastName}}</p>
+    <p class="proles">Birth Date: {{.BirthDate}}</p>
     <h2>Person Roles</h2>
     <h3>Employment Roles</h3>
     <ul>
     {{ range .Workers}}
-    <li>    <li><a href="http://localhost:8080/api/workers/{{.InternalId}}">Employer: {{.Employer}}</a>
-      <p>WorkerId: {{.WorkerId}}</p>
-      <p>Pay: {{.Pay}}</p>
-      <p>Employment Status: {{.EmploymentStatus}}</p>
+    <li class="liroles"><a href="http://localhost:8080/api/workers/{{.InternalId}}">Employer: {{.Employer}}</a>
+      <p class="proles">WorkerId: {{.WorkerId}}</p>
+      <p class="proles">Pay: {{.Pay}}</p>
+      <p class="proles">Employment Status: {{.EmploymentStatus}}</p>
     </li>
     {{end }}
     </ul>
     <h3>Benefit Profile</h3>
     <ul>
     {{ range .Participants}}
-    <li><a href="http://localhost:8080/api/participants/{{.InternalId}}">Benefit: {{.BenefitId}}</a></li>
+    <li class="roles"><a href="http://localhost:8080/api/participants/{{.InternalId}}">Benefit: {{.BenefitId}}</a>
+      <p class="proles">Coverage Start Date: {{.CoverageStartDate}}</p>
+      <p class="proles">Coverage End Date: {{.CoverageEndDate}}</p>
+      <p class="proles">Payroll Reporting State: {{.PayrollReportingState}}</p>
+      <p class="proles">Carrier Reporting State: {{.CarrierReportingState}}</p>
+      <p class="proles">Elected Benefit Offering Id: {{.ElectedBenefitOfferingId}}</p>
+      <p class="proles">Elected Coverage Level: {{.ElectedCoverageLevel}}</p>
+      <p class="proles">Elected Coverage Amount: {{.ElectedCoverageAmount}}</p>
+      <p class="proles">Actual Benefit Offering Id: {{.ActualBenefitOfferingId}}</p>
+      <p class="proles">Actual Coverage Level: {{.ActualCoverageLevel}}</p>
+      <p class="proles">Actual Coverage Amount: {{.ActualCoverageAmount}}</p>
+      <p class="proles">Employee Pretax Cost: {{.EmployeePreTaxCost}}</p>
+      <p class="proles">Employee After Tax Cost: {{.EmployeeAfterTaxCost}}</p>
+      <p class="proles">Employer Cost: {{.EmployerCost}}</p>
+    </li>
     {{end }}
   </ul>
   <h2>Person Business Processes</h2>
   <ul>
     {{ range .BusinessProcesses}}
     <li><a href="http://localhost:8080/api/personBusinessProcesses/{{.ReferenceNumber}}">Reference Number: {{.ReferenceNumber}}</a>
-      <p>Business Process: {{.BusinessProcessDefinitionId}}</p>
-      <p>Effective Date: {{.EffectiveDate}}</p>
-      <p>State: {{.State}}</p>
+      <p class="proles">Business Process: {{.BusinessProcessDefinitionId}}</p>
+      <p class="proles">Effective Date: {{.EffectiveDate}}</p>
+      <p class="proles">State: {{.State}}</p>
     </li>
 
     {{end }}

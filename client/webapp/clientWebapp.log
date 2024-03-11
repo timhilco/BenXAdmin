@@ -1,0 +1,5 @@
+time=2024-03-04T19:02:46.280-05:00 level=INFO msg="Starting HTTP server on Port 3000.."
+time=2024-03-04T19:02:57.654-05:00 level=INFO msg="Gracefully shutting down HTTP server..."
+time=2024-03-04T19:02:57.654-05:00 level=INFO msg="<- ctx.Done in startHTTPServer-- Shutting down HTTP server gracefully..."
+time=2024-03-04T19:02:57.654-05:00 level=INFO msg="HTTP server stopped."
+time=2024-03-04T19:02:57.654-05:00 level=INFO msg="Shutdown complete."

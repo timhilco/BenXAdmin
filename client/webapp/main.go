@@ -20,9 +20,9 @@ import (
 )
 
 type OpenEnrollmentElectionRequest struct {
-	BenefitPlanElections []OpenEnrollmentElection `json:"benefitPlanElections"`
+	BenefitPlanElections []EnrollmentElection `json:"benefitPlanElections"`
 }
-type OpenEnrollmentElection struct {
+type EnrollmentElection struct {
 	BenefitId       string `json:"benefitId"`
 	BenefitPlanId   string `json:"benefitPlanId"`
 	CoverageLevelId string `json:"coverageLevelId"`
@@ -135,37 +135,37 @@ func handleElectionForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	medical := OpenEnrollmentElection{
+	medical := EnrollmentElection{
 		BenefitId:       r.FormValue("mBenefitId"),
 		BenefitPlanId:   r.FormValue("mBenefitPlanId"),
 		CoverageLevelId: r.FormValue("mCoverageLevelId"),
 		CoverageAmount:  "0",
 	}
-	dental := OpenEnrollmentElection{
+	dental := EnrollmentElection{
 		BenefitId:       r.FormValue("dBenefitId"),
 		BenefitPlanId:   r.FormValue("dBenefitPlanId"),
 		CoverageLevelId: r.FormValue("dCoverageLevelId"),
 		CoverageAmount:  "0",
 	}
-	life := OpenEnrollmentElection{
+	life := EnrollmentElection{
 		BenefitId:       r.FormValue("elBenefitId"),
 		BenefitPlanId:   r.FormValue("elBenefitPlanId"),
 		CoverageLevelId: r.FormValue("elCoverageLevelId"),
 		CoverageAmount:  "0",
 	}
-	hsa := OpenEnrollmentElection{
+	hsa := EnrollmentElection{
 		BenefitId:       r.FormValue("hcBenefitId"),
 		BenefitPlanId:   r.FormValue("hcBenefitPlanId"),
 		CoverageLevelId: "0",
 		CoverageAmount:  r.FormValue("hcContribution"),
 	}
-	dcsa := OpenEnrollmentElection{
+	dcsa := EnrollmentElection{
 		BenefitId:       r.FormValue("dcBenefitId"),
 		BenefitPlanId:   r.FormValue("dcBenefitPlanId"),
 		CoverageLevelId: "0",
 		CoverageAmount:  r.FormValue("dcContribution"),
 	}
-	be := make([]OpenEnrollmentElection, 0)
+	be := make([]EnrollmentElection, 0)
 	be = append(be, medical, dental, life, hsa, dcsa)
 
 	elections := OpenEnrollmentElectionRequest{
