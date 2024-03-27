@@ -30,23 +30,25 @@ const (
 type BenefitPeriod interface {
 }
 type CoveragePeriod struct {
-	CoverageStartDate        datatypes.YYYYMMDD_Date `json:"coverageStartDate" bson:"coverageStartDate"`
-	CoverageEndDate          datatypes.YYYYMMDD_Date `json:"coverageEndDate" bson:"coverageEndDate"`
-	PayrollReportingState    int                     `json:"payrollReportingState" bson:"payrollReportingState"`
-	CarrierReportingState    int                     `json:"carrierReportingState" bson:"carrierReportingState"`
-	ElectedBenefitOfferingId string                  `json:"electedBenefitOfferingId" bson:"electedBenefitOfferingId"`
-	ActualBenefitOfferingId  string                  `json:"actualBenefitOfferingId" bson:"actualBenefitOfferingId"`
-	ElectedCoverageLevel     string                  `json:"electedCoverageLevel" bson:"electedCoverageLevel"`
-	ActualCoverageLevel      string                  `json:"actualCoverageLevel" bson:"actualCoverageLevel"`
-	OfferedBenefitOfferingId string                  `json:"offeredBenefitOfferingId" bson:"offeredBenefitOfferingId"`
-	ActualCoverageAmount     datatypes.BigFloat      `json:"actualCoverageAmount" bson:"actualCoverageAmount"`
-	ElectedCoverageAmount    datatypes.BigFloat      `json:"electedCoverageAmount" bson:"electedCoverageAmount"`
-	EmployeePreTaxCost       datatypes.BigFloat      `json:"employeePreTaxCost" bson:"employeePreTaxCost"`
-	EmployerCost             datatypes.BigFloat      `json:"employerCost" bson:"employerCost"`
-	EmployeeAfterTaxCost     datatypes.BigFloat      `json:"employeeAfterTaxCost" bson:"employeeAfterTaxCost"`
-	EmployerSubsidy          datatypes.BigFloat      `json:"employerSubsidy" bson:"employerSubsidy"`
-	LifeImputedIncome        datatypes.BigFloat      `json:"lifeImputedIncome" bson:"lifeImputedIncome"`
+	CoverageStartDate          datatypes.YYYYMMDD_Date `json:"coverageStartDate" bson:"coverageStartDate"`
+	CoverageEndDate            datatypes.YYYYMMDD_Date `json:"coverageEndDate" bson:"coverageEndDate"`
+	PayrollReportingState      int                     `json:"payrollReportingState" bson:"payrollReportingState"`
+	CarrierReportingState      int                     `json:"carrierReportingState" bson:"carrierReportingState"`
+	ElectedBenefitPlanId       string                  `json:"electedBenefitPlanId" bson:"electedBenefitPlanId"`
+	ActualBenefitPlanId        string                  `json:"actualBenefitPlanId" bson:"actualBenefitPlanId"`
+	ElectedTierCoverageLevelId string                  `json:"electedTierCoverageLevelId" bson:"electedTierCoverageLevelId"`
+	ActualTierCoverageLevelId  string                  `json:"actualTierCoverageLevelId" bson:"actualCoverageLevelId"`
+	ActualCoverageAmount       datatypes.BigFloat      `json:"actualCoverageAmount" bson:"actualCoverageAmount"`
+	ElectedCoverageAmount      datatypes.BigFloat      `json:"electedCoverageAmount" bson:"electedCoverageAmount"`
+	//Both Types of Plans
+	EmployeePreTaxCost   datatypes.BigFloat `json:"employeePreTaxCost" bson:"employeePreTaxCost"`
+	EmployerCost         datatypes.BigFloat `json:"employerCost" bson:"employerCost"`
+	EmployeeAfterTaxCost datatypes.BigFloat `json:"employeeAfterTaxCost" bson:"employeeAfterTaxCost"`
+	EmployerSubsidy      datatypes.BigFloat `json:"employerSubsidy" bson:"employerSubsidy"`
+	LifeImputedIncome    datatypes.BigFloat `json:"lifeImputedIncome" bson:"lifeImputedIncome"`
 }
+
+// Contribution Type Plans
 type ContributionPeriod struct {
 	CoverageStartDate  string `json:"coverageStartDate" bson:"coverageStartDate"`
 	CoverageEndDate    string `json:"coverageEndDate" bson:"coverageEndDate"`
@@ -115,12 +117,11 @@ func (p *Participant) ApplyEnrollmentElections(effectiveDate datatypes.YYYYMMDD_
 	//ch := p.CoverageHistory
 	b, _ := datatypes.NewBigFloat(election.CoverageAmount)
 	coveragePeriod := CoveragePeriod{
-		CoverageStartDate:        effectiveDate,
-		PayrollReportingState:    C_STATE_UNREPORTED,
-		CarrierReportingState:    C_STATE_UNREPORTED,
-		ElectedBenefitOfferingId: election.BenefitPlanId,
-		ElectedCoverageLevel:     election.CoverageLevelId,
-		ElectedCoverageAmount:    b,
+		CoverageStartDate:          effectiveDate,
+		PayrollReportingState:      C_STATE_UNREPORTED,
+		CarrierReportingState:      C_STATE_UNREPORTED,
+		ElectedTierCoverageLevelId: election.TierCoverageLevelId,
+		ElectedCoverageAmount:      b,
 	}
 	p.AddCoveragePeriodToCoverageHistory(coveragePeriod, "")
 	return nil

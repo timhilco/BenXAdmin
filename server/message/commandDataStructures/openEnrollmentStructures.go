@@ -4,11 +4,11 @@ type OpenEnrollmentElectionRequest struct {
 	BenefitPlanElections []EnrollmentElection `json:"benefitPlanElections"`
 }
 type EnrollmentElection struct {
-	BenefitId          string `json:"benefitId"`
-	BenefitPlanId      string `json:"benefitPlanId"`
-	CoverageLevelId    string `json:"coverageLevelId"`
-	CoverageAmount     string `json:"coverageAmount"`
-	ContributionAmount string `json:"contributionAmount"`
+	BenefitId           string `json:"benefitId"`
+	BenefitPlanId       string `json:"benefitPlanId"`
+	TierCoverageLevelId string `json:"tierCoverageLevelId"`
+	CoverageAmount      string `json:"coverageAmount"`
+	ContributionAmount  string `json:"contributionAmount"`
 }
 
 type PayrollRelease struct {

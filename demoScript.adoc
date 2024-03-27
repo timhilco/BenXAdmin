@@ -1,0 +1,109 @@
+//:stylesheet: ./resources/default-theme.yml
+
+:doctype: book
+= BenX Admin Demo Script
+:author: Timothy S. Hilgenberg 
+:email: timhilco@gmail.com
+:revdate: April 2024
+:revnumber: 1.0.0
+// Custom Variables
+:draft-version: 1.0.0
+//:hardbreaks: 
+//
+:icons: font
+:toc:
+
+
+
+== Initial Setup Script
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Step 
+|Description
+
+|Reset Databases
+| Delete Mongo Collection
+
+* Person/Worker/Participant Collection
+
+* Person Business Collection
+
+* Plan Collection
+
+|Reset Message Broker (Kafka)
+|
+
+|===
+
+== Client Creation Script
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Step 
+|Description
+
+|Create Benefit Plan Provisions Definition
+|Load Plan Definition from Spreadsheet
+
+
+|Create Annual Enrollment Person Business Process Definition
+|Hard Coded
+
+|Show Person Profile
+| Display Person 010-10-0010
+
+|===
+
+== Annual Enrollment Script
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Step 
+|Description
+
+| Initiate Full Population Annual Enrollment for 01/01/2024
+
+* Create Person Business Process
+
+* Calculate Enrollment Pricetags
+
+* Send Pending Enrollment Communications 
+|
+
+|Show Person Annual Enrollment Business Process
+| Display Person 010-10-0010 Annual Enrollment (010-10-0010_BP001_20240101)
+
+|Enter Annual Enrollment Benefit Choices/Elections
+|
+
+|Show Person Annual Enrollment Business Process
+| Display Person 010-10-0010 Annual Enrollment (010-10-0010_BP001_20240101)
+
+|Simulate hitting Payroll Reporting Date
+|Submit Payroll Reporting Event
+
+|Show Person Annual Enrollment Business Process
+| Display Person 010-10-0010 Annual Enrollment (010-10-0010_BP001_20240101)
+
+|Simulate hitting Carrier Reporting Date
+|Submit Carrier Reporting Event
+
+|Simulate sending Post Enrollment Confirmation Statement
+|Submit Post Enrollment Confirmation Publish Event
+
+|Show Person Annual Enrollment Business Process
+| Display Person 010-10-0010 Annual Enrollment (010-10-0010_BP001_20240101)
+|===
+
+== Post Annual Enrollment / Ongoing Inquiry Script
+
+[width="100%",cols="50%,50%",options="header",]
+|===
+|Step 
+|Description
+
+|Show Person Profile
+| Display Person 010-10-0010
+
+|===

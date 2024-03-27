@@ -18,5 +18,3 @@ State:  {{.State}} -  {{if eq .State 0}}OPEN{{else if eq .State 1}}CLOSED{{else 
 --------  Segments  ----------
 {{- range .SegmentStates}}{{template "segment" .}}{{- end }}
 -------   Data   -------------
-{{.BusinessProcessData}}
-=================================================================

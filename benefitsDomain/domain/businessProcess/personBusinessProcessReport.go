@@ -17,5 +17,9 @@ func (d *PersonBusinessProcess) Report(rc *ResourceContext) string {
 	if err != nil {
 		panic(err)
 	}
-	return buf.String()
+	s1 := buf.String()
+	dd := d.BusinessProcessData
+	s2 := dd.Report(rc)
+	return s1 + "\n" + s2
+
 }

@@ -4,6 +4,7 @@ import (
 	"benefitsDomain/datatypes"
 	"benefitsDomain/domain/benefitPlan"
 	"benefitsDomain/domain/db"
+	"strings"
 )
 
 type EnrollmentBenefitOptionRates struct {
@@ -35,6 +36,48 @@ type OpenEnrollmentElectionCommand struct {
 	CoverageAmount  string `json:"coverageAmount"`
 }
 
+func (e *EnrollmentBenefitOptionRates) Report(rc *ResourceContext) string {
+	var sb strings.Builder
+	for _, b := range e.BenefitPlanOptionsCollection {
+		sb.WriteString("-BenefitPlanOptions\n")
+		sb.WriteString(b.Report(rc))
+	}
+	return sb.String()
+}
+func (b *BenefitPlanOptions) Report(rc *ResourceContext) string {
+	var sb strings.Builder
+	sb.WriteString("Benefit Id :" + b.BenefitId + "\n")
+	for _, o := range b.Options {
+		sb.WriteString("-BenefitPlanOption\n")
+		sb.WriteString(o.Report(rc))
+	}
+	return sb.String()
+}
+func (b *BenefitPlanOption) Report(rc *ResourceContext) string {
+	var sb strings.Builder
+	sb.WriteString("Benefit Plan Id :" + b.BenefitPlanId + "\n")
+	sb.WriteString("Coverage Type :" + b.CoverageType + "\n")
+	sb.WriteString("-TierCoverageLevel\n")
+	for _, o := range b.TierCoverageLevels {
+		sb.WriteString(o.Report(rc))
+	}
+	return sb.String()
+}
+func (b *TierCoverageLevel) Report(rc *ResourceContext) string {
+	var sb strings.Builder
+	sb.WriteString(b.ElectionId)
+	sb.WriteString(" ")
+	sb.WriteString(b.CoverageLevel)
+	sb.WriteString(" ")
+	sb.WriteString(b.CoverageAmount.FormattedString(""))
+	sb.WriteString(" ")
+	sb.WriteString(b.EmployeeMonthlyRate.FormattedString(""))
+	sb.WriteString(" ")
+	sb.WriteString(b.EmployerMonthlyRate.FormattedString(""))
+	sb.WriteString("\n")
+
+	return sb.String()
+}
 func (pbp *PersonBusinessProcess) buildOpenEnrollmentBusinessProcessData(mpc *MessageProcessingContext) EnrollmentBenefitOptionRates {
 	bpos := make([]BenefitPlanOptions, 0)
 	egs := db.GetEligibilityGroups(mpc.ResourceContext.planDataStore)

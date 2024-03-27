@@ -189,7 +189,7 @@ func (bp *CoverageBenefitPlan) MarshalBSON() ([]byte, error) {
 
 	return b2, err
 }
-func DetermineBenefitType(name string) int {
+func DetermineBenefitCoverageType(name string) int {
 	switch name {
 	case "Medical",
 		"Dental":

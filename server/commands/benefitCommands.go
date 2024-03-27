@@ -91,7 +91,7 @@ func LoadBenefitFromSpreadsheet(fileName string) (string, []*benefitPlan.Benefit
 				b.BenefitId = colB
 			case "<Benefit Type>":
 				b.BenefitType = colB
-				benefitType = benefitPlan.DetermineBenefitType(colB)
+				benefitType = benefitPlan.DetermineBenefitCoverageType(colB)
 			case "<Coverage Type>":
 				//coverageType = colB
 			case "<Benefit Plan>":

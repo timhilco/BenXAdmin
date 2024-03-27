@@ -28,18 +28,18 @@ const (
 )
 
 type PersonBusinessProcess struct {
-	InternalId                  string                     `json:"internalId" bson:"internalId"`
-	ReferenceNumber             string                     `json:"referenceNumber" bson:"referenceNumber"`
-	PersonId                    string                     `json:"personId" bson:"personId"`
-	State                       int                        `json:"state" bson:"state"`
-	BusinessProcessDefinitionId string                     `json:"businessProcessDefinitionId" bson:"businessProcessDefinitionId"`
-	EffectiveDate               datatypes.YYYYMMDD_Date    `json:"effectiveDate" bson:"effectiveDate"`
-	CreationDate                datatypes.YYYYMMDD_Date    `json:"creationDate" bson:"creationDate"`
-	SourceEventReferenceNumber  string                     `json:"sourceEventReferenceNumber" bson:"sourceEventReferenceNumber"`
-	SourceType                  string                     `json:"sourceType" bson:"sourceType"`
-	SegmentStates               []SegmentState             `json:"segmentStates" bson:"segmentStates"`
-	TriggeredBusinessProcesses  []TriggeredBusinessProcess `json:"triggeredEvents" bson:"triggeredEvents"`
-	BusinessProcessData         interface{}                `json:"data" bson:"data"`
+	InternalId                  string                       `json:"internalId" bson:"internalId"`
+	ReferenceNumber             string                       `json:"referenceNumber" bson:"referenceNumber"`
+	PersonId                    string                       `json:"personId" bson:"personId"`
+	State                       int                          `json:"state" bson:"state"`
+	BusinessProcessDefinitionId string                       `json:"businessProcessDefinitionId" bson:"businessProcessDefinitionId"`
+	EffectiveDate               datatypes.YYYYMMDD_Date      `json:"effectiveDate" bson:"effectiveDate"`
+	CreationDate                datatypes.YYYYMMDD_Date      `json:"creationDate" bson:"creationDate"`
+	SourceEventReferenceNumber  string                       `json:"sourceEventReferenceNumber" bson:"sourceEventReferenceNumber"`
+	SourceType                  string                       `json:"sourceType" bson:"sourceType"`
+	SegmentStates               []SegmentState               `json:"segmentStates" bson:"segmentStates"`
+	TriggeredBusinessProcesses  []TriggeredBusinessProcess   `json:"triggeredEvents" bson:"triggeredEvents"`
+	BusinessProcessData         EnrollmentBenefitOptionRates `json:"enrollmentBenefitOptionRates" bson:"enrollmentBenefitOptionRates"`
 }
 type SegmentState struct {
 	SegmentDefinitionId  string `json:"segmentDefinitionId" bson:"segmentDefinitionId"`
@@ -459,22 +459,29 @@ func (pbp *PersonBusinessProcess) CreateNewCoveragePeriodFromElections(election 
 	coverageEndDate := benefit.DetermineCoverageEndDate(pbp.EffectiveDate)
 
 	coveragePeriod := personRoles.CoveragePeriod{
-		CoverageStartDate:        coverageStartDate,
-		CoverageEndDate:          coverageEndDate,
-		PayrollReportingState:    C_STATE_UNREPORTED,
-		CarrierReportingState:    C_STATE_UNREPORTED,
-		ElectedBenefitOfferingId: election.BenefitPlanId,
-		ElectedCoverageLevel:     election.CoverageLevelId,
-		ActualBenefitOfferingId:  "",
-		ActualCoverageLevel:      "",
-		OfferedBenefitOfferingId: "",
-		ActualCoverageAmount:     b,
-		ElectedCoverageAmount:    b,
-		EmployeePreTaxCost:       z,
-		EmployerCost:             z,
-		EmployeeAfterTaxCost:     z,
-		EmployerSubsidy:          z,
-		LifeImputedIncome:        z,
+		CoverageStartDate:          coverageStartDate,
+		CoverageEndDate:            coverageEndDate,
+		PayrollReportingState:      C_STATE_UNREPORTED,
+		CarrierReportingState:      C_STATE_UNREPORTED,
+		ElectedBenefitPlanId:       election.BenefitPlanId,
+		ElectedTierCoverageLevelId: election.TierCoverageLevelId,
+		ActualBenefitPlanId:        election.BenefitPlanId,
+		ActualTierCoverageLevelId:  election.TierCoverageLevelId,
+		ActualCoverageAmount:       b,
+		ElectedCoverageAmount:      b,
+		EmployeePreTaxCost:         z,
+		EmployerCost:               z,
+		EmployeeAfterTaxCost:       z,
+		EmployerSubsidy:            z,
+		LifeImputedIncome:          z,
+	}
+	ct := benefitPlan.DetermineBenefitCoverageType(benefit.BenefitType)
+	switch ct {
+	case benefitPlan.C_BENEFIT_TYPE_COVERED_AMOUNT:
+		// Add calculated Coverage amount based on Tier elected
+		//coveragePeriod.ActualCoverageAmount  =   election.CoverageAmount
+		//coveragePeriod.ElectedCoverageAmount  =  election.CoverageAmount
+	default:
 	}
 	f, _ := datatypes.NewBigFloat("10.0")
 	coveragePeriod.EmployeePreTaxCost = f
